@@ -1,0 +1,25 @@
+-- PAPÉIS
+INSERT INTO papel (nome) VALUES 
+('Professor'),
+('Monitor');
+
+-- USUÁRIOS
+INSERT INTO usuario (nome, email, senha, papel_id) VALUES 
+('Ana Professor', 'ana.professor@email.com', 'senha123', 1),
+('Carlos Monitor', 'carlos.monitor@email.com', 'senha123', 2);
+
+-- DISCIPLINAS
+INSERT INTO disciplina (nome, codigo) VALUES 
+('Estrutura de Dados', 'ED123'),
+('Programação Orientada a Objetos', 'POO456');
+
+-- MONITORIAS
+INSERT INTO monitoria (status, horario, ano, semestre, usuario_id, disciplina_id) VALUES 
+('Ativa', 'Segundas 10h', 2025, 1, 2, 1),  -- Carlos é o monitor, ED123
+('Encerrada', 'Quartas 14h', 2024, 2, 2, 2); -- Carlos também foi monitor de POO
+
+-- PRESENÇAS
+INSERT INTO presenca (nr_alunos, data, monitoria_id) VALUES 
+(5, '2025-05-02', 1),
+(7, '2025-05-09', 1),
+(3, '2024-11-10', 2);

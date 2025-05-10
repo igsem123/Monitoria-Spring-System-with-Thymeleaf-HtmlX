@@ -1,0 +1,22 @@
+-- Database: monitoria_db
+
+-- DROP DATABASE IF EXISTS monitoria_db;
+
+CREATE DATABASE monitoria_db
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'pt_BR.UTF-8'
+    LC_CTYPE = 'pt_BR.UTF-8'
+    LOCALE_PROVIDER = 'libc'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+
+COMMENT ON DATABASE monitoria_db
+    IS 'Banco de Dados criado para a matéria de DAW1.';
+
+GRANT TEMPORARY, CONNECT ON DATABASE monitoria_db TO PUBLIC;
+
+GRANT CREATE, CONNECT ON DATABASE monitoria_db TO postgres;
+GRANT TEMPORARY ON DATABASE monitoria_db TO postgres WITH GRANT OPTION;
