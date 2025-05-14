@@ -10,6 +10,7 @@
     <li th:each="usuario : ${usuarios}">
         <span th:text="${usuario.nome}">Nome do Usuário</span> -
         <span th:text="${usuario.email}">Email do Usuário</span>
+        <span th:text="${usuario.papel.nome}">Papel do Usuário</span>
     </li>
 </ul>
 </body>
