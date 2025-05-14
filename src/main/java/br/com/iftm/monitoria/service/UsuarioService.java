@@ -15,4 +15,20 @@ public class UsuarioService {
     public List<Usuario> listarTodos() {
         return repository.findAll();
     }
+
+    public Usuario salvar(Usuario usuario) {
+        return repository.save(usuario);
+    }
+
+    public Usuario buscarPorId(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void deletar(Long id) {
+        repository.deleteById(id);
+    }
+
+    public List<Usuario> buscarPorNome(String nome) {
+        return repository.findByNome(nome);
+    }
 }
