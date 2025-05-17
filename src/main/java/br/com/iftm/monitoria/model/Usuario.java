@@ -1,6 +1,8 @@
 package br.com.iftm.monitoria.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 
 @Entity
 public class Usuario {
@@ -8,8 +10,13 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String nome;
+
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String senha;
 
     @ManyToOne

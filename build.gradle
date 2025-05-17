@@ -23,6 +23,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'io.github.wimdeblauwe:htmx-spring-boot-thymeleaf:4.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.2.Final' // Jakarta Annotations
+	implementation 'org.hibernate.validator:hibernate-validator-annotation-processor:8.0.2.Final'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
