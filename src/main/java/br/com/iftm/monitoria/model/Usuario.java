@@ -16,10 +16,11 @@ public class Usuario {
     @NotBlank
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Senha é obrigatória!")
     private String senha;
 
     @ManyToOne
+    @JoinColumn(name = "papel_id")
     private Papel papel;
 
     // Getters e Setters

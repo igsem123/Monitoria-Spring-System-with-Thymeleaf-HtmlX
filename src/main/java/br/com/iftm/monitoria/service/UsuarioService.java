@@ -16,8 +16,22 @@ public class UsuarioService {
         return repository.findAll();
     }
 
-    public Usuario salvar(Usuario usuario) {
-        return repository.save(usuario);
+    public void salvar(Usuario usuario) {
+        repository.save(usuario);
+    }
+
+    public void atualizarUsuario(Usuario atualizado) {
+        Usuario existente = repository.findById(atualizado.getId())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        existente.setNome(atualizado.getNome());
+        existente.setEmail(atualizado.getEmail());
+
+        if (atualizado.getSenha() != null && !atualizado.getSenha().isBlank()) {
+            existente.setSenha(atualizado.getSenha());
+        }
+
+        repository.save(existente);
     }
 
     public Usuario buscarPorId(Long id) {
