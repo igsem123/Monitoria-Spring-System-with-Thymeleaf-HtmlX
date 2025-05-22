@@ -1,0 +1,24 @@
+{
+  "name": "monitoria-spring-system-with-thymeleaf-htmlx",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "tailwind:build": "tailwindcss -i ./src/main/css/input.css -o ./src/main/resources/static/css/output.css",
+    "tailwind:watch": "tailwindcss -i ./src/main/css/input.css -o ./src/main/resources/static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igsem123/Monitoria-Spring-System-with-Thymeleaf-HtmlX.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/igsem123/Monitoria-Spring-System-with-Thymeleaf-HtmlX/issues"
+  },
+  "homepage": "https://github.com/igsem123/Monitoria-Spring-System-with-Thymeleaf-HtmlX#readme",
+  "description": "",
+  "devDependencies": {
+    "tailwindcss": "^4.1.7"
+  }
+}
