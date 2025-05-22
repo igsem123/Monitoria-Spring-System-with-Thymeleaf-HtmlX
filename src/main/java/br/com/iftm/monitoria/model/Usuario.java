@@ -1,6 +1,8 @@
 package br.com.iftm.monitoria.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+
 
 @Entity
 public class Usuario {
@@ -8,11 +10,17 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Nome é obrigatório!")
     private String nome;
+
+    @NotBlank(message = "Email é obrigatório!")
     private String email;
+
+    @NotBlank(message = "Senha é obrigatória!")
     private String senha;
 
     @ManyToOne
+    @JoinColumn(name = "papel_id")
     private Papel papel;
 
     // Getters e Setters
