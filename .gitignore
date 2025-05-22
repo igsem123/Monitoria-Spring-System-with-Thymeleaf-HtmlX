@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Tailwind CSS
+src/main/resources/static/css/output.css
+
+# Node.js
+node_modules/
