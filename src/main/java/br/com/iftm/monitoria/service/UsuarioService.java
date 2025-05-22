@@ -31,6 +31,7 @@ public class UsuarioService {
             existente.setSenha(atualizado.getSenha());
         }
 
+        existente.setPapel(atualizado.getPapel());
         repository.save(existente);
     }
 

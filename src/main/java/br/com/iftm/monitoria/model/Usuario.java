@@ -10,10 +10,10 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Nome é obrigatório!")
     private String nome;
 
-    @NotBlank
+    @NotBlank(message = "Email é obrigatório!")
     private String email;
 
     @NotBlank(message = "Senha é obrigatória!")

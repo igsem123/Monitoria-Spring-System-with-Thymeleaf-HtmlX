@@ -63,7 +63,7 @@ public class UsuarioController {
     }
 
     // Processa o envio do formulário de edição
-    @PostMapping("/{id}") // Lida com a atualização do usuário
+    @PostMapping("/atualizar/{id}") // Lida com a atualização do usuário
     public String atualizarUsuario(@PathVariable Long id, @ModelAttribute Usuario usuario, RedirectAttributes redirectAttributes) {
         usuarioService.atualizarUsuario(usuario);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário atualizado com sucesso!");
