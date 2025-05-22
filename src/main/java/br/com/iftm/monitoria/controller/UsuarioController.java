@@ -6,10 +6,7 @@ import br.com.iftm.monitoria.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +19,6 @@ public class UsuarioController {
     @Autowired
     private PapelService papelService;
 
-    // Local para adicionar métodos para lidar com requisições HTTP, como GET, POST, PUT, DELETE
      @GetMapping
      public String listarUsuarios(Model model) {
          List<Usuario> usuarios = usuarioService.listarTodos();
@@ -33,12 +29,20 @@ public class UsuarioController {
     @GetMapping("/cadastrar")
     public String mostrarFormularioCadastro(Model model) {
         model.addAttribute("papeis", papelService.listarTodos());
-        return "cadastroUsuarios"; // Nome da sua view HTML
+        return "cadastroUsuarios"; // Nome da View HTML
+    }
+
+    @GetMapping("/editar/{id}")
+    public String mostrarFormularioEdicao(@PathVariable Long id, Model model) {
+    Usuario usuario = usuarioService.buscarPorId(id);
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("papeis", papelService.listarTodos());
+        return "editarUsuario"; // Nome da View HTML
     }
 
     @PostMapping
     public String salvarUsuario(@ModelAttribute Usuario usuario) {
         usuarioService.salvar(usuario);
-        return "redirect:/usuarios"; // ou para onde quiser ir após salvar
+        return "redirect:/usuarios"; // Para onde redirecionar após o cadastro
     }
 }

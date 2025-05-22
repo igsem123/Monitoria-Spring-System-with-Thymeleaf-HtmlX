@@ -1,40 +1,41 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Usuários:</title>
+    <title>Editar Usuário</title>
     <link rel="stylesheet" href="/css/output.css">
 </head>
-<body class="bg-gray-100 text-left p-4">
-<h1 class="text-2xl font-bold text-green-700">Cadastro de Usuários</h1>
+<body>
+<h1 class="text-2xl font-bold text-green-700">Editar Usuário</h1>
 <h2 class="text-lg font-bold text-green-600">Preencha o formulário com as informações do usuário:</h2>
 <div class="flex justify-center items-center h-screen">
-    <form th:action="@{/usuarios}" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <form th:action="@{/usuarios/editar/{id}(id=${usuario.id})}" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div class="mb-4">
             <label for="nome" class="block text-gray-700 text-sm font-bold mb-2">Nome:</label>
-            <input type="text" id="nome" name="nome" required
+            <input type="text" id="nome" name="nome" th:value="${usuario.nome}" required
                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
         <div class="mb-4">
             <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email:</label>
-            <input type="email" id="email" name="email" required
+            <input type="email" id="email" name="email" th:value="${usuario.email}" required
                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
         <div class="mb-4">
             <label for="senha" class="block text-gray-700 text-sm font-bold mb-2">Senha:</label>
-            <input type="password" id="senha" name="senha" required
+            <input type="password" id="senha" name="senha"
                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
         </div>
         <div class="mb-4">
             <label for="papelId" class="block text-gray-700 text-sm font-bold mb-2">Papel:</label>
             <select id="papelId" name="papelId"
                     class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <option value="" disabled selected>Selecione um papel</option>
-                <option th:each="papel : ${papeis}" th:value="${papel.id}" th:text="${papel.nome}"></option>
+                <option th:each="papel : ${papeis}" th:value="${papel.id}" th:text="${papel.nome}"
+                        th:selected="${usuario.papel.id == papel.id}">
+                </option>
             </select>
         </div>
         <button type="submit"
-                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cadastrar
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Salvar
         </button>
     </form>
 </div>

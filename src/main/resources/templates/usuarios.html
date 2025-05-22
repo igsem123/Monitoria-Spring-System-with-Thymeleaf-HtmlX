@@ -3,15 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Usuários</title>
+    <link rel="stylesheet" href="/css/output.css">
 </head>
-<body>
-<h1>Usuários registrados no sistema:</h1>
-<ul>
-    <li th:each="usuario : ${usuarios}">
-        <span th:text="${usuario.nome}">Nome do Usuário</span> -
-        <span th:text="${usuario.email}">Email do Usuário</span>
-        <span th:text="${usuario.papel.nome}">Papel do Usuário</span>
-    </li>
-</ul>
+<body class="bg-gray-100 text-left p-4">
+<h1 class="text-2xl font-bold text-green-700">Usuários registrados no sistema:</h1>
+<div class="flex justify-center items-center p-8">
+    <ul>
+        <li th:each="usuario : ${usuarios}" class="mb-2 p-4 bg-green-50 shadow-md rounded font-ubunt">
+            <div class="flex flex-row justify-between items-center">
+                <!-- Coluna de dados do usuário -->
+                <div class="flex flex-col flex-1 mr-8">
+                <p class="mb-2 p-4 bg-white shadow-md rounded font-semibold text-green-500">
+                    Nome:
+                        <span class="text-gray-700" th:text="${usuario.nome}"></span>
+                </p>
+                <p class="mb-2 p-4 bg-white shadow-md rounded font-semibold text-green-500">
+                    Email:
+                        <span class="text-gray-700" th:text="${usuario.email}"></span>
+                </p>
+                <p class="mb-2 p-4 bg-white shadow-md rounded font-semibold text-green-500">
+                    Papel:
+                        <span class="text-gray-700" th:text="${usuario.papel.nome}"></span>
+                </p>
+            </div>
+                <!-- Coluna de botões -->
+                <div class="flex flex-col items-center">
+                <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}"
+                       class="mb-2 bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Editar</a>
+                    <form th:action="@{/usuarios/deletar/{id}(id=${usuario.id})}" method="post" class="ml-0">
+                    <button type="submit"
+                            class="bg-red-400 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Deletar
+                    </button>
+                </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div class="flex justify-center items-center p-4">
+    <a href="/usuarios/cadastrar"
+       class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Cadastrar
+        Novo Usuário</a>
+</div>
 </body>
 </html>
