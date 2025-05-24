@@ -1,7 +1,8 @@
 -- PAPÉIS
 INSERT INTO papel (nome) VALUES 
 ('Professor'),
-('Monitor');
+('Monitor'),
+('Administrador');
 
 -- USUÁRIOS
 INSERT INTO usuario (nome, email, senha, papel_id) VALUES 
