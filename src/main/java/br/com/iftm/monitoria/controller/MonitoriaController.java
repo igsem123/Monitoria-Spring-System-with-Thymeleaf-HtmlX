@@ -21,5 +21,6 @@ public class MonitoriaController {
     public String listarMonitorias(Model model) {
         List<Monitoria> monitorias = service.listarTodos();
         model.addAttribute("monitorias", monitorias);
-        return "monitorias";  
+        return "monitorias";
     }
+}

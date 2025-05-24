@@ -1,4 +1,4 @@
-Package br.com.iftm.monitoria.model;
+package br.com.iftm.monitoria.model;
 
 import jakarta.persistence.*;
 import java.util.List;
