@@ -23,6 +23,18 @@ public class Usuario {
     @JoinColumn(name = "papel_id")
     private Papel papel;
 
+    // Construtores
+    public Usuario(String nome, String email, String senha, Papel papel) {
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.papel = papel;
+    }
+
+    public Usuario() {
+        // Construtor vazio
+    }
+
     // Getters e Setters
     public Long getId() {
         return id;
