@@ -1,6 +1,7 @@
 package br.com.iftm.monitoria.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Papel {
@@ -8,7 +9,15 @@ public class Papel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "O nome do papel é obrigatório.")
     private String nome;
+
+    // Construtor
+    public Papel(String nome) {
+        this.nome = nome;
+    }
+
+    public Papel() {}
 
     public Long getId() {
         return id;
