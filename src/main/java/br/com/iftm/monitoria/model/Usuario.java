@@ -52,7 +52,7 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public Papel getPapel() {
+    public String getPapel() {
         return papel;
     }
 
