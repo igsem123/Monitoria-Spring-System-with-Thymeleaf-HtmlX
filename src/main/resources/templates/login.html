@@ -33,6 +33,13 @@
                 class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 ease-in-out shadow-md">
             Entrar
         </button>
+
+        <!-- Erro de autenticação -->
+        <div th:if="${param.error}" class="mt-4 text-red-600 text-sm text-center">
+            <p>Usuário ou senha inválidos. Tente novamente.</p>
+            <p>Se você esqueceu sua senha, entre em contato com o suporte.</p>
+        </div>
+
         <div class="text-center">
             <p class="text-sm text-gray-600">Não tem uma conta?</p>
             <a href="/usuarios/cadastrar" class="text-sm text-green-600 hover:text-green-700">Cadastre-se!</a>
