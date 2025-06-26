@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Usuários:</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/output.css}" />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/output.css}"/>
 </head>
 <body class="bg-gray-100 text-gray-800 antialiased font-ubuntu">
 <div class="container mx-auto mt-10 p-6 bg-white shadow-xl rounded-lg">
@@ -21,7 +23,8 @@
     </div>
 
     <div class="flex justify-center">
-        <form th:action="@{/usuarios}" method="post" th:object="${usuario}" class="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg border border-gray-200">
+        <form th:action="@{/usuarios}" method="post" th:object="${usuario}"
+              class="w-full max-w-lg bg-white p-8 rounded-lg shadow-lg border border-gray-200">
             <div class="mb-5">
                 <label for="nome" class="block text-gray-700 text-sm font-semibold mb-2">Nome:</label>
                 <input type="text" id="nome" name="nome" required
@@ -50,14 +53,37 @@
                 Cadastrar
             </button>
 
-            <div class="mt-4">
-                <a href="/usuarios" class="text-sm text-green-600 hover:text-green-700">Voltar para a lista de usuários</a>
-            </div>
 
-            <div th:if="${mensagemSucesso}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <sec:authorize access="hasRole('MONITOR') or hasRole('PROFESSOR')">
+                <div class="mt-4">
+                    <a href="/login" class="text-sm text-green-600 hover:text-green-700">Voltar para a tela de login</a>
+                </div>
+            </sec:authorize>
+
+            <th:block th:if="${#authentication != null}">
+                <div class="mt-4 text-center">
+                    <sec:authorize access="hasRole('ADMIN')">
+                        <div class="mt-4">
+                            <a href="/usuarios" class="text-sm text-green-600 hover:text-green-700">Voltar para a lista
+                                de usuários</a>
+                        </div>
+                    </sec:authorize>
+                    <sec:authorize access="hasRole('MONITOR') or hasRole('PROFESSOR')">
+                        <div class="mt-4">
+                            <a href="/perfil" class="text-sm text-green-600 hover:text-green-700">Voltar para o meu
+                                perfil</a>
+                        </div>
+                    </sec:authorize>
+                </div>
+            </th:block>
+
+            <div th:if="${mensagemSucesso}"
+                 class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+                 role="alert">
                 <span th:text="${mensagemSucesso}"></span>
             </div>
-            <div th:if="${mensagemErro}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <div th:if="${mensagemErro}"
+                 class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span th:text="${mensagemErro}"></span>
             </div>
         </form>
