@@ -3,12 +3,10 @@
     <div class="flex justify-between">
         <div class="text-xl font-bold">Meu Sistema</div>
         <div class="space-x-4">
-            <a th:href="@{/}" class="hover:underline">Início</a>
-            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}"
-               th:href="@{/admin}" class="hover:underline">Admin</a>
-            <a th:if="${#authorization.expression('hasRole(''USER'')')}"
-               th:href="@{/perfil}" class="hover:underline">Meu Perfil</a>
-            <a th:href="@{/logout}" class="hover:underline">Sair</a>
+            <a class="hover:underline">Início</a>
+            <a class="hover:underline">Admin</a>
+            <a class="hover:underline">Meu Perfil</a>
+            <a class="hover:underline">Sair</a>
         </div>
     </div>
 </div>

@@ -16,20 +16,22 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/login", "/usuarios/cadastrar", "/css/**", "/js/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/")
+                        .defaultSuccessUrl("/usuarios", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
                 );
@@ -42,14 +44,22 @@ public class SecurityConfig {
                 .map(usuario -> User.builder()
                         .username(usuario.getEmail())
                         .password(usuario.getSenha())
-                        .roles(usuario.getPapel()) // Thymeleaf usa ROLE_*
+                        .roles(normalizarPapel(usuario.getPapel().getNome()))
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
-    }
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private String normalizarPapel(String papelNome) {
+        return switch (papelNome.toLowerCase()) {
+            case "administrador" -> "ADMIN";
+            case "professor" -> "PROFESSOR";
+            case "monitor" -> "MONITOR";
+            default -> throw new IllegalArgumentException("Papel desconhecido: " + papelNome);
+        };
     }
 }
