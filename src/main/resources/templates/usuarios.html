@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Gerenciamento de Usuários</title>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/output.css}" />
 </head>
-<body class="bg-green-50 text-gray-800 antialiased min-h-screen flex flex-col items-center py-10 font-ubuntu">
-
-<!--<th:block th:replace="fragments/menu :: menu"></th:block>-->
-
+<th:block th:replace="fragments/menu :: menu"></th:block>
+<body class="bg-green-50 text-gray-800 antialiased min-h-screen flex flex-col items-center font-ubuntu">
 <div class="container mx-auto px-4 max-w-4xl">
     <div class="flex justify-center items-center md:w-auto bg-gray-50 p-6 rounded-lg shadow-md border border-gray-200 mb-4">
         <img src="/images/logo-iftm.png" alt="Logo IFTM" class="w-24 h-24 object-contain mr-4">

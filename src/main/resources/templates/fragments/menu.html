@@ -1,12 +1,20 @@
 <!-- fragments/menu.html -->
-<div class="bg-gray-800 text-white p-4">
-    <div class="flex justify-between">
-        <div class="text-xl font-bold">Meu Sistema</div>
-        <div class="space-x-4">
-            <a class="hover:underline">Início</a>
-            <a class="hover:underline">Admin</a>
+<div th:fragment="menu"
+     class="w-full bg-white text-gray-700 p-4 shadow-md mb-6" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="flex justify-between items-center max-w-6xl mx-auto">
+        <div class="text-xl font-bold">
+            <img src="/images/logo-iftm-short.png" alt="Logo IFTM" class="w-8 h-8 object-contain">
+        </div>
+        <div class="space-x-6">
+            <a href="index" class="hover:underline">Início</a>
+            <sec:authorize access="hasRole('ADMIN')">
+                <a href="/usuarios" class="hover:underline">Usuários</a>
+            </sec:authorize>
+            <a href="/listar-monitorias" class="hover:underline">Monitorias</a>
+            <a class="hover:underline">Disciplinas</a>
+            <a class="hover:underline">Relatórios</a>
             <a class="hover:underline">Meu Perfil</a>
-            <a class="hover:underline">Sair</a>
+            <a href="logout" class="hover:underline">Sair</a>
         </div>
     </div>
 </div>
