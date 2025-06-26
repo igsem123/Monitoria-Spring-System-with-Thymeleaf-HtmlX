@@ -3,6 +3,7 @@ package br.com.iftm.monitoria.service;
 import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,12 +12,24 @@ import java.util.List;
 public class UsuarioService {
     @Autowired
     private UsuarioRepository repository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Usuario> listarTodos() {
         return repository.findAll();
     }
 
     public void salvar(Usuario usuario) {
+        if(usuario.getSenha() == null || usuario.getSenha().isEmpty()) {
+            throw new RuntimeException("Senha é obrigatória!");
+        } else if(usuario.getPapel() == null) {
+            throw new RuntimeException("Papel é obrigatório!");
+        } else if(usuario.getEmail() == null || usuario.getEmail().isEmpty()) {
+            throw new RuntimeException("Email é obrigatório!");
+        }
+
+        var senhaEncriptada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaEncriptada);
         repository.save(usuario);
     }
 
