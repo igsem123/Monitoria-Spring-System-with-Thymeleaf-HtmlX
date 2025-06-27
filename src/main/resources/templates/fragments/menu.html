@@ -6,15 +6,15 @@
             <img src="/images/logo-iftm-short.png" alt="Logo IFTM" class="w-8 h-8 object-contain">
         </div>
         <div class="space-x-6">
-            <a href="index" class="hover:underline">Início</a>
+            <a href="/index" class="hover:underline hover:bg-gray-200 hover:text-green-700 px-2 py-1 rounded transition">Início</a>
             <sec:authorize access="hasRole('ADMIN')">
-                <a href="/usuarios" class="hover:underline">Usuários</a>
+                <a href="/usuarios" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Usuários</a>
             </sec:authorize>
-            <a href="/monitorias" class="hover:underline">Monitorias</a>
-            <a class="hover:underline">Disciplinas</a>
-            <a class="hover:underline">Relatórios</a>
-            <a class="hover:underline">Meu Perfil</a>
-            <a href="logout" class="hover:underline">Sair</a>
+            <a href="/monitorias" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Monitorias</a>
+            <a class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Disciplinas</a>
+            <a class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Relatórios</a>
+            <a href="/perfil" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Meu Perfil</a>
+            <a href="/logout" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Sair</a>
         </div>
     </div>
 </div>

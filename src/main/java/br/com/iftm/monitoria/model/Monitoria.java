@@ -5,13 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 public class Monitoria {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotNull(message = "ID é obrigatório!")
     private Long id;
 
     @NotNull(message = "Status é obrigatório!")
@@ -25,27 +25,18 @@ public class Monitoria {
     @NotNull(message = "Semestre é obrigatório!")
     private Integer semestre;
 
-    @Column(name = "professor_id")
-    private Integer professorId;
-
-    @Column(name = "disciplina_id")
-    private Integer disciplinaId;
-
     private String descricao;
 
-    @Column(name = "monitor_id")
-    private Integer monitorId;
-
     @ManyToOne
-    @JoinColumn(name = "monitor_id", insertable = false, updatable = false)
+    @JoinColumn(name = "monitor_id")
     private Usuario monitor;
 
     @ManyToOne
-    @JoinColumn(name = "disciplina_id", insertable = false, updatable = false)
+    @JoinColumn(name = "disciplina_id")
     private Disciplina disciplina;
 
     @OneToOne
-    @JoinColumn(name = "professor_id", insertable = false, updatable = false)
+    @JoinColumn(name = "professor_id")
     private Usuario professor;
 
     // Construtor
@@ -54,8 +45,6 @@ public class Monitoria {
         this.horario = horario;
         this.ano = ano;
         this.semestre = semestre;
-        this.professorId = professorId;
-        this.disciplinaId = disciplinaId;
         this.descricao = descricao;
         this.monitor = monitor;
     }
@@ -103,36 +92,12 @@ public class Monitoria {
         this.id = id;
     }
 
-    public Integer getProfessorId() {
-        return professorId;
-    }
-
-    public void setProfessorId(Integer professorId) {
-        this.professorId = professorId;
-    }
-
     public String getDescricao() {
         return descricao;
     }
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
-    }
-
-    public Integer getMonitorId() {
-        return monitorId;
-    }
-
-    public void setMonitorId(Integer monitorId) {
-        this.monitorId = monitorId;
-    }
-
-    public Integer getDisciplinaId() {
-        return disciplinaId;
-    }
-
-    public void setDisciplinaId(Integer disciplinaId) {
-        this.disciplinaId = disciplinaId;
     }
 
     public Usuario getMonitor() {

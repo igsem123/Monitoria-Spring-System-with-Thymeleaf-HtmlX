@@ -91,4 +91,12 @@ public class UsuarioService {
     public List<Usuario> buscarPorNome(String nome) {
         return repository.findByNome(nome);
     }
+
+    public Usuario buscarPorEmail(String email) {
+        if (email == null || email.isEmpty()) {
+            throw new RuntimeException("Email não pode ser nulo ou vazio.");
+        }
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuário com email " + email + " não encontrado."));
+    }
 }
