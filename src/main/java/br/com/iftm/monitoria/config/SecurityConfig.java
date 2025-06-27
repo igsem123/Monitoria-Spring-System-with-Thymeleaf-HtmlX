@@ -22,12 +22,16 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/index", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PROFESSOR")
+                        .requestMatchers("/monitorias/**").hasAnyRole("ADMIN", "PROFESSOR", "MONITOR")
+                        .requestMatchers("/disciplinas/**").hasAnyRole("ADMIN", "PROFESSOR", "MONITOR")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .defaultSuccessUrl("/index", true)
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
