@@ -11,6 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/output.css}"/>
 </head>
 <body class="bg-gray-100 text-gray-800 antialiased font-ubuntu">
+<th:block sec:authorize="isAuthenticated()" th:replace="~{fragments/menu :: menu}"></th:block>
 <div class="container mx-auto mt-10 p-6 bg-white shadow-xl rounded-lg">
     <div class="flex flex-col md:flex-row items-center justify-center p-6 mb-8 bg-green-50 rounded-lg shadow-md">
         <div class="mb-6 md:mb-0 md:mr-8 flex-shrink-0">
@@ -60,7 +61,7 @@
                 </div>
             </sec:authorize>
 
-            <th:block th:if="${#authentication != null}">
+            <sec:authorize access="isAuthenticated()">
                 <div class="mt-4 text-center">
                     <sec:authorize access="hasRole('ADMIN')">
                         <div class="mt-4">
@@ -68,14 +69,14 @@
                                 de usuários</a>
                         </div>
                     </sec:authorize>
-                    <sec:authorize access="hasRole('MONITOR') or hasRole('PROFESSOR')">
+                    <sec:authorize access="hasAnyRole('MONITOR','PROFESSOR') and !hasRole('ADMIN')">
                         <div class="mt-4">
                             <a href="/perfil" class="text-sm text-green-600 hover:text-green-700">Voltar para o meu
                                 perfil</a>
                         </div>
                     </sec:authorize>
                 </div>
-            </th:block>
+            </sec:authorize>
 
             <div th:if="${mensagemSucesso}"
                  class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"

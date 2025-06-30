@@ -58,6 +58,37 @@ public class MonitoriaController {
         return "listaMonitorias"; // Nome da View HTML para a listagem de monitorias
     }
 
+    @GetMapping("/inscricoes")
+    public String listarInscricoes(
+            Model model,
+            Principal principal,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size
+    ) {
+        if (principal == null) {
+            return "redirect:/login"; // Redireciona para a página de login se o usuário não estiver autenticado
+        }
+
+        String email = principal.getName();
+        Usuario usuario = usuarioService.buscarPorEmail(email);
+
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(10);
+
+        Page<Monitoria> inscricoesPage = service.listarInscricoesPorUsuario(usuario, PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("inscricoesPage", inscricoesPage);
+
+        int totalPages = inscricoesPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        return "listaInscricoes"; // Nome da View HTML para a lista de inscrições do usuário
+    }
+
     @PostMapping
     public String cadastrarMonitoria(@ModelAttribute Monitoria monitoria, RedirectAttributes redirectAttributes) {
         service.salvar(monitoria);
@@ -153,5 +184,17 @@ public class MonitoriaController {
         Usuario usuario = usuarioService.buscarPorEmail(email);
         service.cancelarInscricao(id, usuario);
         return "redirect:/monitorias";
+    }
+
+    @GetMapping("/visualizar/{id}")
+    public String visualizarMonitoria(@PathVariable Long id, Model model, @AuthenticationPrincipal Usuario usuario) {
+        Monitoria monitoria = service.buscarPorId(id);
+        if (monitoria == null) {
+            return "redirect:/monitorias"; // Redireciona se a monitoria não for encontrada
+        }
+
+        model.addAttribute("monitoria", monitoria);
+        model.addAttribute("usuario", usuario); // Adiciona o usuário autenticado ao modelo
+        return "visualizarMonitoria"; // Nome da View HTML para visualizar detalhes da monitoria
     }
 }

@@ -40,6 +40,26 @@ public class MonitoriaService {
         return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
     }
 
+    public Page<Monitoria> listarInscricoesPorUsuario(Usuario usuario, Pageable pageable) {
+        if (usuario == null || usuario.getId() == null) {
+            throw new RuntimeException("Usuário inválido!");
+        }
+
+        List<Monitoria> monitorias = repository.findByMonitorId(usuario.getId());
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        if (monitorias.size() < startItem) {
+            monitorias = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, monitorias.size());
+            monitorias = monitorias.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
+    }
+
     public void salvar(Monitoria monitoria) {
         if (monitoria.getAno() == null || monitoria.getAno() <= 0) {
             throw new RuntimeException("Ano é obrigatório e deve ser maior que zero!");
