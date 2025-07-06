@@ -2,6 +2,7 @@ package br.com.iftm.monitoria.controller;
 
 import br.com.iftm.monitoria.model.Disciplina;
 import br.com.iftm.monitoria.model.Monitoria;
+import br.com.iftm.monitoria.model.StatusMonitoria;
 import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.service.DisciplinaService;
 import br.com.iftm.monitoria.service.MonitoriaService;
@@ -151,6 +152,8 @@ public class MonitoriaController {
         List<Disciplina> disciplinas = disciplinaService.listarTodos();
         model.addAttribute("disciplinas", disciplinas);
 
+        model.addAttribute("statusMonitorias", StatusMonitoria.values());
+
         model.addAttribute("monitoria", monitoria);
         return "edicaoMonitorias"; // Nome da View HTML para o formulário de edição
     }
@@ -196,5 +199,16 @@ public class MonitoriaController {
         model.addAttribute("monitoria", monitoria);
         model.addAttribute("usuario", usuario); // Adiciona o usuário autenticado ao modelo
         return "visualizarMonitoria"; // Nome da View HTML para visualizar detalhes da monitoria
+    }
+
+    @PostMapping("/encerrar/{id}")
+    public String encerrarMonitoria(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            service.encerrarMonitoria(id);
+            redirectAttributes.addFlashAttribute("mensagemSucesso", "Monitoria encerrada com sucesso!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao encerrar monitoria: " + e.getMessage());
+        }
+        return "redirect:/monitorias"; // Redireciona para a lista de monitorias após o encerramento
     }
 }

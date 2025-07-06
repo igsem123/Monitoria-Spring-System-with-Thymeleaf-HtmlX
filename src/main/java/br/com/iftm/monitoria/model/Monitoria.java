@@ -15,7 +15,8 @@ public class Monitoria {
     private Long id;
 
     @NotNull(message = "Status é obrigatório!")
-    private String status;
+    @Enumerated(EnumType.ORDINAL)
+    private StatusMonitoria status;
 
     private String horario;
 
@@ -40,7 +41,7 @@ public class Monitoria {
     private Usuario professor;
 
     // Construtor
-    public Monitoria(String status, String horario, Integer ano, Integer semestre, Integer professorId, Integer disciplinaId, String descricao, Usuario monitor) {
+    public Monitoria(StatusMonitoria status, String horario, Integer ano, Integer semestre, Integer professorId, Integer disciplinaId, String descricao, Usuario monitor) {
         this.status = status;
         this.horario = horario;
         this.ano = ano;
@@ -52,11 +53,11 @@ public class Monitoria {
     public Monitoria() {
     }
 
-    public String getStatus() {
+    public StatusMonitoria getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusMonitoria status) {
         this.status = status;
     }
 
