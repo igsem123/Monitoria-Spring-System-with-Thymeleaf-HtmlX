@@ -1,6 +1,7 @@
 package br.com.iftm.monitoria.service;
 
 import br.com.iftm.monitoria.model.Monitoria;
+import br.com.iftm.monitoria.model.StatusMonitoria;
 import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.repository.MonitoriaRepository;
 import br.com.iftm.monitoria.repository.PresencaRepository;
@@ -40,6 +41,26 @@ public class MonitoriaService {
         return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
     }
 
+    public Page<Monitoria> listarInscricoesPorUsuario(Usuario usuario, Pageable pageable) {
+        if (usuario == null || usuario.getId() == null) {
+            throw new RuntimeException("Usuário inválido!");
+        }
+
+        List<Monitoria> monitorias = repository.findByMonitorId(usuario.getId());
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        if (monitorias.size() < startItem) {
+            monitorias = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, monitorias.size());
+            monitorias = monitorias.subList(startItem, toIndex);
+        }
+
+        return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
+    }
+
     public void salvar(Monitoria monitoria) {
         if (monitoria.getAno() == null || monitoria.getAno() <= 0) {
             throw new RuntimeException("Ano é obrigatório e deve ser maior que zero!");
@@ -52,9 +73,9 @@ public class MonitoriaService {
         }
 
         if (monitoria.getMonitor() == null) {
-            monitoria.setStatus("ABERTA");
+            monitoria.setStatus(StatusMonitoria.ABERTA);
         } else {
-            monitoria.setStatus("ATIVA");
+            monitoria.setStatus(StatusMonitoria.ATIVA);
         }
 
         try {
@@ -77,7 +98,7 @@ public class MonitoriaService {
         }
 
         monitoria.setMonitor(usuario);
-        monitoria.setStatus("ATIVA");
+        monitoria.setStatus(StatusMonitoria.ATIVA);
 
         try {
             repository.save(monitoria);
@@ -95,7 +116,7 @@ public class MonitoriaService {
         }
 
         monitoria.setMonitor(null);
-        monitoria.setStatus("ABERTA");
+        monitoria.setStatus(StatusMonitoria.ABERTA);
 
         try {
             repository.save(monitoria);
@@ -124,5 +145,22 @@ public class MonitoriaService {
     public Monitoria buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Monitoria não encontrada"));
+    }
+
+    public void encerrarMonitoria(Long id) {
+        Monitoria monitoria = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Monitoria não encontrada"));
+
+        if (monitoria.getStatus() != StatusMonitoria.ATIVA) {
+            throw new RuntimeException("Monitoria não está ativa para ser encerrada!");
+        }
+
+        monitoria.setStatus(StatusMonitoria.ENCERRADA);
+
+        try {
+            repository.save(monitoria);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao encerrar monitoria: " + e.getMessage(), e);
+        }
     }
 }

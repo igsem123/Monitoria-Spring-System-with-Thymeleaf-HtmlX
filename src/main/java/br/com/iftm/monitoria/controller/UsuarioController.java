@@ -5,6 +5,8 @@ import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.service.PapelService;
 import br.com.iftm.monitoria.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +26,19 @@ public class UsuarioController {
     // Exibe a lista de usuários
     @GetMapping({"", "/listar"}) // Mapeia tanto a raiz quanto o /listar para a view de listagem
     public String listarUsuarios(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verifica se o usuário está autenticado e se é um administrador ou monitor/professor
+        boolean authenticated = authentication.isAuthenticated();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+        boolean isMonitorOrProfessor = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_MONITOR") || authority.getAuthority().equals("ROLE_PROFESSOR"));
+
         List<Usuario> usuarios = usuarioService.listarTodos();
         model.addAttribute("usuarios", usuarios);
+        model.addAttribute("isAdmin", isAdmin);
+        model.addAttribute("isMonitorOrProfessor", isMonitorOrProfessor);
         return "usuarios";
     }
 
