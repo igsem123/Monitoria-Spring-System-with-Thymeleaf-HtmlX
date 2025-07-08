@@ -3,28 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Meu Perfil</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <script src="https://unpkg.com/htmx.org@1.9.5"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap"
+          rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/output.css}"/>
 </head>
 <body class="bg-green-100 text-gray-800 antialiased min-h-screen flex flex-col items-center font-ubuntu">
-<th:block th:replace="~{fragments/menu :: menu}" />
+<th:block th:replace="~{fragments/menu :: menu}"/>
 
 <main class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md w-full max-w-md mt-8">
     <div class="relative group mb-4">
-        <img th:src="@{/images/avatar/student.png}" alt="Avatar do usuário"
-             class="w-24 h-24 rounded-full border-4 border-green-200 cursor-pointer"
-             aria-label="Trocar avatar">
-        <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <span class="text-white text-sm font-semibold text-center px-2">Clique para trocar o avatar</span>
+        <!-- Local para exibir o avatar que será atualizado -->
+        <div id="avatar-display">
+            <div th:replace="fragments/avatar-display :: avatarDisplay"></div>
         </div>
+
+        <!-- Botão que dispara a requisição para carregar o modal -->
+        <button
+                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 w-full h-full"
+                hx-get="/ui/modal-avatar"
+                hx-target="#modal-container-avatar"
+                hx-swap="innerHTML"
+                aria-label="Trocar avatar"
+        >
+            <span class="text-white text-sm font-semibold text-center px-2">Clique para trocar o avatar</span>
+        </button>
     </div>
 
-    <div id="perfil-detalhe" hx-get="/perfil/detalhe" hx-trigger="load">
-        <h2 th:text="${perfil.nome}" class="text-2xl font-bold mb-1">Nome</h2>
-        <p th:text="${perfil.email}" class="text-gray-600 mb-4">Email</p>
+    <!-- Container onde o modal de avatares pré selecionados ser renderizado -->
+    <div id="modal-container-avatar"></div>
+
+    <!-- Página de perfil -->
+    <div id="perfil-detalhe">
+        <div th:replace="fragments/perfil-detalhe :: perfilDetalhe"></div>
     </div>
 
     <div class="flex gap-4 mt-4">
@@ -41,7 +56,7 @@
         </a>
     </div>
 
-    <!-- Container para o modal ser injetado -->
+    <!-- Container para o modal de editar perfil ser injetado -->
     <div id="modal-container"></div>
 
     <script>
@@ -57,3 +72,12 @@
 </main>
 </body>
 </html>
+
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        event.detail.headers[csrfHeader] = csrfToken;
+    });
+</script>
+

@@ -54,6 +54,10 @@ public class UsuarioService {
                 existente.setSenha(passwordEncoder.encode(atualizado.getSenha()));
             }
 
+            if (atualizado.getAvatarPath() != null && !atualizado.getAvatarPath().isBlank()) {
+                existente.setAvatarPath(atualizado.getAvatarPath());
+            }
+
             existente.setPapel(atualizado.getPapel());
             repository.save(existente);
         } catch (RuntimeException e) {
@@ -98,5 +102,17 @@ public class UsuarioService {
         }
         return repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário com email " + email + " não encontrado."));
+    }
+
+    public void atualizarAvatar(Usuario usuario) {
+        try {
+            Usuario existente = repository.findById(usuario.getId())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+            existente.setAvatarPath(usuario.getAvatarPath());
+            repository.save(existente);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao atualizar avatar: " + e.getMessage());
+        }
     }
 }
