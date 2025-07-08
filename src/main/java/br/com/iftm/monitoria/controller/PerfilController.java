@@ -10,12 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequestMapping("/perfil")
 public class PerfilController {
 
     @Autowired
@@ -43,7 +45,7 @@ public class PerfilController {
      * @param model
      * @return
      */
-    @GetMapping("/perfil")
+    @GetMapping
     public String perfil(
             Principal principal, // Obtém o usuário logado
             Model model
@@ -65,7 +67,7 @@ public class PerfilController {
      * @return
      */
     @HxRequest
-    @GetMapping("/perfil/detalhe")
+    @GetMapping("/detalhe")
     public String perfilDetalheFragment(Principal principal, Model model) {
         if (principal == null) {
             return "redirect:/login";
@@ -84,7 +86,7 @@ public class PerfilController {
      * @return
      */
     @HxRequest
-    @GetMapping("/perfil/editar")
+    @GetMapping("/editar")
     public String editarPerfilForm(Principal principal, Model model) {
         if (principal == null) return "redirect:/login"; // cuidado aqui: redireciona a página inteira
 
@@ -104,7 +106,7 @@ public class PerfilController {
      * @return
      */
     @HxRequest
-    @PostMapping("/perfil/editar")
+    @PostMapping("/editar")
     public String editarPerfilPost(
             @RequestParam("nome") String nome,
             @RequestParam("email") String email,
@@ -147,7 +149,7 @@ public class PerfilController {
      * e retorna o HTML atualizado do display do avatar.
      */
     @HxRequest
-    @PostMapping("/perfil/avatar/selecionar")
+    @PostMapping("/avatar/selecionar")
     public String selecionarAvatar(
             @RequestParam String avatarUrl,
             Model model,

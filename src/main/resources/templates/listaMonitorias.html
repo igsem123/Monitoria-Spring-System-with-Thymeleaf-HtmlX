@@ -53,8 +53,7 @@
         </thead>
         <tbody>
         <tr th:each="monitoria, iStat : ${monitoriasPage.content}"
-            th:class="${iStat.even ? 'bg-gray-100' : 'bg-white'}"
-            th:alt-title="${iStat.even}? 'Linha par' : 'Linha ímpar'">
+            th:class="${iStat.even ? 'bg-gray-100' : 'bg-white'}">
             <td class="px-4 py-2 border" th:text="${monitoria.status}"></td>
             <td class="px-4 py-2 border" th:text="${monitoria.horario}"></td>
             <td class="px-4 py-2 border" th:text="${monitoria.ano}"></td>
@@ -71,7 +70,7 @@
                             th:if="${usuarioLogado != null and (usuarioLogado.papel.nome == 'Administrador' or usuarioLogado.papel.nome == 'Professor')}">
 
                         <a th:href="@{/monitorias/editar/{id}(id=${monitoria.id})}"
-                           class="text-blue-500 hover:text-blue-700">
+                           class="text-blue-500 hover:text-blue-700" title="Editar Monitoria">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                  stroke-width="1.5"
                                  stroke="currentColor" class="size-6">
@@ -81,7 +80,7 @@
                         </a>
                         <form th:action="@{/monitorias/deletar/{id}(id=${monitoria.id})}" method="post"
                               class="inline-block">
-                            <button type="submit" class="text-red-500 hover:text-red-700">
+                            <button type="submit" class="text-red-500 hover:text-red-700" title="Excluir monitoria">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5"
                                      stroke="currentColor" class="size-6">
@@ -93,7 +92,7 @@
                         <form th:action="@{/monitorias/encerrar/{id}(id=${monitoria.id})}" method="post"
                               th:if="${monitoria.status.name() == 'ABERTA' or monitoria.status.name() == 'ATIVA'}"
                               class="inline-block">
-                            <button type="submit" class="text-violet-500 hover:text-violet-700">
+                            <button type="submit" class="text-violet-500 hover:text-violet-700" title="Encerrar Monitoria">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -104,7 +103,7 @@
                     </th:block>
 
                     <a th:href="@{/monitorias/visualizar/{id}(id=${monitoria.id})}"
-                       class="text-green-500 hover:text-green-700">
+                       class="text-green-500 hover:text-green-700" title="Visualizar Monitoria">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                              stroke="currentColor" class="size-6">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -118,7 +117,7 @@
                         <form th:action="@{/monitorias/inscrever/{id}(id=${monitoria.id})}" method="post"
                               th:if="${monitoria.status == 'ABERTA' and (monitoria.monitor == null or monitoria.monitor.id != usuarioLogado.id)}"
                               class="inline-block">
-                            <button type="submit" class="text-yellow-500 hover:text-yellow-700">
+                            <button type="submit" class="text-yellow-500 hover:text-yellow-700" title="Inscrever como Monitor">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5"
                                      stroke="currentColor" class="size-6">
@@ -130,7 +129,7 @@
                         <form th:action="@{/monitorias/cancelarInscricao/{id}(id=${monitoria.id})}" method="post"
                               th:if="${monitoria.status == 'ATIVA' and monitoria.monitor != null and monitoria.monitor.id == usuarioLogado.id}"
                               class="inline-block">
-                            <button type="submit" class="text-orange-500 hover:text-orange-700">
+                            <button type="submit" class="text-orange-500 hover:text-orange-700" title="Cancelar Inscrição como Monitor">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5"
                                      stroke="currentColor" class="size-6">

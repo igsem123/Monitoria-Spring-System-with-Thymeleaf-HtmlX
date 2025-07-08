@@ -60,17 +60,6 @@
 
     <!-- Container para o modal de editar perfil ser injetado -->
     <div id="modal-container"></div>
-
-    <script>
-        // Pré-visualização do avatar
-        function previewAvatar(input) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('avatar-preview').src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    </script>
 </main>
 </body>
 </html>
