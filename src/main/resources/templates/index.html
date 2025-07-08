@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Sistema de Monitoria</title>
@@ -23,6 +24,13 @@
 
     <div class="bg-white shadow-xl rounded-lg p-6 mb-8 border border-gray-200">
         <p class="text-lg text-gray-800 mb-4">Selecione uma das opções no menu para começar.</p>
+        <div>
+            <p sec:authorize="isAuthenticated()">✅ Usuário autenticado</p>
+            <p sec:authorize="hasRole('ADMIN')">🔐 Você é ADMIN</p>
+            <p sec:authorize="hasRole('PROFESSOR')">📘 Você é PROFESSOR</p>
+            <p sec:authorize="hasRole('MONITOR')">📗 Você é MONITOR</p>
+            <p>Usuário logado: <span sec:authentication="name"></span></p>
+        </div>
     </div>
 </div>
 </body>

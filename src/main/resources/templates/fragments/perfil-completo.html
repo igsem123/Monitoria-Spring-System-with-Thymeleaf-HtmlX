@@ -1,0 +1,11 @@
+<!-- fragments/perfil-completo.html -->
+
+<div th:fragment="multiAtualizacao">
+    <div id="perfil-detalhe" hx-swap-oob="true">
+        <div th:replace="fragments/perfil-detalhe :: perfilDetalhe"></div>
+    </div>
+
+    <div id="avatar-display" hx-swap-oob="true">
+        <div th:replace="fragments/avatar-display :: avatarDisplay"></div>
+    </div>
+</div>
