@@ -21,6 +21,14 @@ public class DisciplinaController {
     public String listarDisciplinas(Model model) {
         List<Disciplina> disciplinas = service.listarTodos();
         model.addAttribute("disciplinas", disciplinas);
-        return "disciplinas"; 
+        return "disciplinas";
+    }
+
+    // Exibe o formulário de cadastro de disciplina
+    @GetMapping("/cadastrar")
+    public String mostrarFormularioCadastro(Model model) {
+        Disciplina novaDisciplina = new Disciplina();
+        model.addAttribute("disciplina", novaDisciplina);
+        return "cadastroDisciplina"; // Nome da View HTML para o formulário
     }
 }

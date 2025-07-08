@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+    <meta charset="UTF-8">
+    <title>Editar Monitoria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/output.css}"/>
+</head>
+<body class="bg-green-100 text-gray-800 antialiased font-ubuntu">
+<div th:replace="fragments/menu :: menu"></div>
+<div class="w-6/12 container mx-auto mt-10 p-6 bg-white shadow-xl rounded-lg">
+    <div class="flex flex-col md:flex-row items-center justify-center p-6 mb-8 bg-gray-100 rounded-lg shadow-md">
+        <div class="mb-6 md:mb-0 md:mr-8 flex-shrink-0">
+            <img src="/images/logo-iftm.png" alt="Logo IFTM" class="w-24 h-24 object-contain">
+        </div>
+        <div class="text-center md:text-left">
+            <h1 class="text-3xl font-extrabold text-green-800 mb-2">Edição de Monitorias</h1>
+            <h2 class="text-lg text-green-600">Preencha o formulário com as informações para editar a monitoria.</h2>
+        </div>
+    </div>
+
+    <form th:action="@{/monitorias/editar/{id}(id=${monitoria.id})}" method="post" th:object="${monitoria}"
+          class="w-full bg-white p-8 rounded-lg shadow-lg border border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-6 items-center align-middle">
+        <div>
+            <label for="horario" class="block text-sm font-medium text-gray-700">Horário</label>
+            <input type="text" id="horario" name="horario" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                   th:value="${monitoria.horario}" placeholder="Digite o horário">
+        </div>
+        <div>
+            <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+            <select id="status" name="status" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                <option value="" disabled selected>Selecione o status</option>
+                <option th:each="status : ${statusMonitorias}" th:value="${status}" th:text="${status}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="ano" class="block text-sm font-medium text-gray-700">Ano</label>
+            <input type="number" id="ano" name="ano" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+            th:value="${monitoria.ano}" placeholder="Digite o ano">
+        </div>
+        <div>
+            <label for="semestre" class="block text-sm font-medium text-gray-700">Semestre</label>
+            <input type="number" id="semestre" name="semestre" required
+                   class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+            th:value="${monitoria.semestre}" placeholder="Digite o semestre">
+        </div>
+        <div>
+            <label for="professor" class="block text-sm font-medium text-gray-700">Professor</label>
+            <select id="professor" name="professor" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                <option value="" disabled selected>Selecione um professor</option>
+                <option th:each="professor : ${professores}" th:value="${professor.id}"
+                        th:text="${professor.nome}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="disciplina" class="block text-sm font-medium text-gray-700">Disciplina</label>
+            <select id="disciplina" name="disciplina" required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                <option value="" disabled selected>Selecione uma disciplina</option>
+                <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}"
+                        th:text="${disciplina.nome}"></option>
+            </select>
+        </div>
+        <div>
+            <label for="monitor" class="block text-sm font-medium text-gray-700">Monitor</label>
+            <select id="monitor" name="monitor"
+                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
+                <option value="" disabled selected>Selecione um monitor (opcional)</option>
+                <option th:each="monitor : ${monitores}" th:value="${monitor.id}"
+                        th:text="${monitor.nome}"></option>
+            </select>
+        </div>
+        <div class="col-span-2 mb-5">
+            <label for="descricao" class="block text-gray-700 text-sm font-semibold mb-2">Descrição (Opcional):</label>
+            <textarea id="descricao" name="descricao"
+                      class="form-textarea w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out"
+                      th:text="${monitoria.descricao}" placeholder="Informe a descrição da monitoria"></textarea>
+        </div>
+        <button type="submit"
+                class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 ease-in-out shadow-md">
+            Atualizar Monitoria
+        </button>
+
+        <a href="/monitorias" class="text-sm text-green-600 hover:text-green-700">Voltar para a lista de
+            monitorias</a>
+    </form>
+</div>
+<div class="text-center mt-8">
+    <a href="/monitorias/cadastrar"
+       class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 ease-in-out shadow-lg">
+        Cadastrar Nova Monitoria
+    </a>
+</div>
+
+</body>
+</html>
