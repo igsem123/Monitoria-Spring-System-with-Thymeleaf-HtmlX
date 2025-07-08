@@ -1,4 +1,4 @@
-/** @type {import('ta ilwindcss').Config} */
+/** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
         "./src/main/resources/templates/**/*.html", // Pasta dos templates Thymeleaf

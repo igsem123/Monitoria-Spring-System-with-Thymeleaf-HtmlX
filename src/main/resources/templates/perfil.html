@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Meu Perfil</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/output.css}"/>
+</head>
+<body class="bg-green-100 text-gray-800 antialiased min-h-screen flex flex-col items-center font-ubuntu">
+<th:block th:replace="~{fragments/menu :: menu}"/>
+
+<main class="flex flex-col items-center justify-center bg-white p-6 rounded-lg shadow-md w-full max-w-md mt-8">
+    <div class="relative group mb-4">
+        <!-- Local para exibir o avatar que será atualizado -->
+        <div id="avatar-display">
+            <div th:replace="fragments/avatar-display :: avatarDisplay"></div>
+        </div>
+
+        <!-- Botão que dispara a requisição para carregar o modal -->
+        <button
+                class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 w-full h-full"
+                hx-get="/ui/modal-avatar"
+                hx-target="#modal-container-avatar"
+                hx-swap="innerHTML"
+                aria-label="Trocar avatar"
+        >
+            <span class="text-white text-sm font-semibold text-center px-2">Clique para trocar o avatar</span>
+        </button>
+    </div>
+
+    <!-- Container onde o modal de avatares pré selecionados ser renderizado -->
+    <div id="modal-container-avatar" class="w-full flex justify-center"></div>
+
+    <!-- Página de perfil -->
+    <div id="perfil-detalhe">
+        <div th:replace="fragments/perfil-detalhe :: perfilDetalhe"></div>
+    </div>
+
+    <div class="flex gap-4 mt-4">
+        <button
+                hx-get="/perfil/editar"
+                hx-target="#modal-container"
+                hx-swap="innerHTML"
+                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition">
+            Editar Perfil
+        </button>
+
+        <form th:action="@{/logout}" method="post" class="inline">
+            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
+            Sair
+            </button>
+        </form>
+    </div>
+
+    <!-- Container para o modal de editar perfil ser injetado -->
+    <div id="modal-container"></div>
+
+    <script>
+        // Pré-visualização do avatar
+        function previewAvatar(input) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('avatar-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    </script>
+</main>
+</body>
+</html>
+
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+        const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+        event.detail.headers[csrfHeader] = csrfToken;
+    });
+</script>
+

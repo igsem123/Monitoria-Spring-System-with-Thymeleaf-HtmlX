@@ -44,14 +44,25 @@ public class UsuarioService {
 
     public void atualizarUsuario(Usuario atualizado) {
         try {
+            System.out.println("Senha recebida: " + atualizado.getSenha());
+
             Usuario existente = repository.findById(atualizado.getId())
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
             existente.setNome(atualizado.getNome());
             existente.setEmail(atualizado.getEmail());
 
-            if (atualizado.getSenha() != null && !atualizado.getSenha().isBlank()) {
-                existente.setSenha(atualizado.getSenha());
+            String novaSenha = atualizado.getSenha();
+
+            if (novaSenha != null && !novaSenha.isBlank() && !(novaSenha.equals(existente.getSenha()))) {
+                // só altera se for uma senha diferente da já armazenada
+                if (!passwordEncoder.matches(novaSenha, existente.getSenha())) {
+                    existente.setSenha(passwordEncoder.encode(novaSenha));
+                }
+            }
+
+            if (atualizado.getAvatarPath() != null && !atualizado.getAvatarPath().isBlank()) {
+                existente.setAvatarPath(atualizado.getAvatarPath());
             }
 
             existente.setPapel(atualizado.getPapel());
@@ -98,5 +109,17 @@ public class UsuarioService {
         }
         return repository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuário com email " + email + " não encontrado."));
+    }
+
+    public void atualizarAvatar(Usuario usuario) {
+        try {
+            Usuario existente = repository.findById(usuario.getId())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+            existente.setAvatarPath(usuario.getAvatarPath());
+            repository.save(existente);
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao atualizar avatar: " + e.getMessage());
+        }
     }
 }

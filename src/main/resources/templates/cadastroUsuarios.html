@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <title>Cadastro de Usuários:</title>
@@ -11,7 +11,11 @@
     <link rel="stylesheet" th:href="@{/css/output.css}"/>
 </head>
 <body class="bg-gray-100 text-gray-800 antialiased font-ubuntu">
-<th:block sec:authorize="isAuthenticated()" th:replace="~{fragments/menu :: menu}"></th:block>
+
+<div sec:authorize="isAuthenticated()">
+    <th:block th:replace="~{fragments/menu :: menu}"></th:block>
+</div>
+
 <div class="container mx-auto mt-10 p-6 bg-white shadow-xl rounded-lg">
     <div class="flex flex-col md:flex-row items-center justify-center p-6 mb-8 bg-green-50 rounded-lg shadow-md">
         <div class="mb-6 md:mb-0 md:mr-8 flex-shrink-0">
@@ -46,7 +50,11 @@
                 <select id="papelId" th:field="*{papel.id}"
                         class="form-select w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out">
                     <option value="" disabled selected>Selecione um papel</option>
-                    <option th:each="papel : ${papeis}" th:value="${papel.id}" th:text="${papel.nome}"></option>
+                    <option th:each="papel : ${papeis}"
+                            th:if="${#authorization.expression('hasRole(''PROFESSOR'') or isAnonymous()') ? papel.nome == 'Monitor' : true}"
+                            th:value="${papel.id}"
+                            th:text="${papel.nome}">
+                    </option>
                 </select>
             </div>
             <button type="submit"
@@ -55,28 +63,21 @@
             </button>
 
 
-            <sec:authorize access="hasRole('MONITOR') or hasRole('PROFESSOR')">
+            <div sec:authorize="isAnonymous()">
                 <div class="mt-4">
                     <a href="/login" class="text-sm text-green-600 hover:text-green-700">Voltar para a tela de login</a>
                 </div>
-            </sec:authorize>
+            </div>
 
-            <sec:authorize access="isAuthenticated()">
-                <div class="mt-4 text-center">
-                    <sec:authorize access="hasRole('ADMIN')">
-                        <div class="mt-4">
-                            <a href="/usuarios" class="text-sm text-green-600 hover:text-green-700">Voltar para a lista
-                                de usuários</a>
-                        </div>
-                    </sec:authorize>
-                    <sec:authorize access="hasAnyRole('MONITOR','PROFESSOR') and !hasRole('ADMIN')">
-                        <div class="mt-4">
-                            <a href="/perfil" class="text-sm text-green-600 hover:text-green-700">Voltar para o meu
-                                perfil</a>
-                        </div>
-                    </sec:authorize>
+            <div sec:authorize="isAuthenticated()" class="mt-4 text-center">
+                <div sec:authorize="hasRole('ADMIN') or hasRole('PROFESSOR')">
+                    <div class="mt-4">
+                        <a href="/usuarios" class="text-sm text-green-600 hover:text-green-700">
+                            Voltar para a lista de usuários
+                        </a>
+                    </div>
                 </div>
-            </sec:authorize>
+            </div>
 
             <div th:if="${mensagemSucesso}"
                  class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"

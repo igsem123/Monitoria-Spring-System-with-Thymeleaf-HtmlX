@@ -19,6 +19,9 @@ public class Usuario {
     @NotBlank(message = "Senha é obrigatória!")
     private String senha;
 
+    @Column(name = "avatar_path")
+    private String avatarPath;
+
     @ManyToOne
     @JoinColumn(name = "papel_id")
     private Papel papel;
@@ -74,5 +77,13 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setAvatarPath(String path) {
+        this.avatarPath = path;
+    }
+
+    public String getAvatarPath() {
+        return avatarPath;
     }
 }

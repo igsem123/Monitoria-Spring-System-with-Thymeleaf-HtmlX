@@ -41,3 +41,4 @@ src/main/resources/static/css/output.css
 
 # Node.js
 node_modules/
+target/

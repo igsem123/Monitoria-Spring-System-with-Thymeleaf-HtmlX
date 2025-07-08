@@ -1,0 +1,9 @@
+<!-- fragments/avatar-display.html -->
+<th:block th:fragment="avatarDisplay">
+    <div id="avatar-display" hx-swap-oob="true">
+        <img th:if="${perfil.avatarPath != null}" th:src="${perfil.avatarPath}" alt="Avatar Atual"
+             class="w-32 h-32 rounded-full border-4 border-green-200 mx-auto">
+        <img th:if="${perfil.avatarPath == null}" src="/images/avatars/student.png" alt="Avatar Placeholder"
+             class="w-32 h-32 rounded-full border-4 border-green-200 mx-auto">
+    </div>
+</th:block>

@@ -14,4 +14,8 @@ public class PapelService {
     public List<Papel> listarTodos() {
         return repository.findAll();
     }
+
+    public Papel buscarPorNome(String monitor) {
+        return repository.findPapelByNome(monitor);
+    }
 }
