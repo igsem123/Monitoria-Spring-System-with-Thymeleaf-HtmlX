@@ -4,4 +4,5 @@ import br.com.iftm.monitoria.model.Papel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PapelRepository extends JpaRepository<Papel, Long> {
+    Papel findPapelByNome(String nome);
 }

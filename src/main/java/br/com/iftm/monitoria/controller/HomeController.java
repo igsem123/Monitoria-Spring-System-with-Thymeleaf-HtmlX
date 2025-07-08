@@ -41,11 +41,6 @@ public class HomeController {
         return "redirect:/login?error"; // Redireciona para a página de login com um parâmetro de erro
     }
 
-    @RequestMapping("/logout")
-    public String logout() {
-        return "redirect:/login?logout"; // Redireciona para a página de login com um parâmetro de logout
-    }
-
     @GetMapping("/index")
     public String index() {
         return "index"; // Nome da View HTML para a página inicial

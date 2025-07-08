@@ -51,7 +51,7 @@ public class UsuarioService {
             existente.setEmail(atualizado.getEmail());
 
             if (atualizado.getSenha() != null && !atualizado.getSenha().isBlank()) {
-                existente.setSenha(atualizado.getSenha());
+                existente.setSenha(passwordEncoder.encode(atualizado.getSenha()));
             }
 
             existente.setPapel(atualizado.getPapel());
