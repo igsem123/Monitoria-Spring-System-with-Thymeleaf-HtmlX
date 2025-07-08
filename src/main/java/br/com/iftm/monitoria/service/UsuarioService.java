@@ -44,14 +44,21 @@ public class UsuarioService {
 
     public void atualizarUsuario(Usuario atualizado) {
         try {
+            System.out.println("Senha recebida: " + atualizado.getSenha());
+
             Usuario existente = repository.findById(atualizado.getId())
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
             existente.setNome(atualizado.getNome());
             existente.setEmail(atualizado.getEmail());
 
-            if (atualizado.getSenha() != null && !atualizado.getSenha().isBlank()) {
-                existente.setSenha(passwordEncoder.encode(atualizado.getSenha()));
+            String novaSenha = atualizado.getSenha();
+
+            if (novaSenha != null && !novaSenha.isBlank() && !(novaSenha.equals(existente.getSenha()))) {
+                // só altera se for uma senha diferente da já armazenada
+                if (!passwordEncoder.matches(novaSenha, existente.getSenha())) {
+                    existente.setSenha(passwordEncoder.encode(novaSenha));
+                }
             }
 
             if (atualizado.getAvatarPath() != null && !atualizado.getAvatarPath().isBlank()) {

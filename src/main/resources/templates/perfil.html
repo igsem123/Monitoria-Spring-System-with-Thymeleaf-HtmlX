@@ -35,7 +35,7 @@
     </div>
 
     <!-- Container onde o modal de avatares pré selecionados ser renderizado -->
-    <div id="modal-container-avatar"></div>
+    <div id="modal-container-avatar" class="w-full flex justify-center"></div>
 
     <!-- Página de perfil -->
     <div id="perfil-detalhe">
@@ -51,9 +51,11 @@
             Editar Perfil
         </button>
 
-        <a th:href="@{/logout}" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
+        <form th:action="@{/logout}" method="post" class="inline">
+            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded transition">
             Sair
-        </a>
+            </button>
+        </form>
     </div>
 
     <!-- Container para o modal de editar perfil ser injetado -->

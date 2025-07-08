@@ -11,15 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class PerfilController {
@@ -43,6 +37,12 @@ public class PerfilController {
 
     private static final Logger logger = LoggerFactory.getLogger(PerfilController.class);
 
+    /**
+     * Endpoint para exibir o perfil do usuário.
+     * @param principal
+     * @param model
+     * @return
+     */
     @GetMapping("/perfil")
     public String perfil(
             Principal principal, // Obtém o usuário logado
@@ -58,6 +58,12 @@ public class PerfilController {
         return "perfil"; // Nome da View HTML para a página de perfil do usuário
     }
 
+    /**
+     * Endpoint para exibir o fragmento do perfil do usuário.
+     * @param principal
+     * @param model
+     * @return
+     */
     @HxRequest
     @GetMapping("/perfil/detalhe")
     public String perfilDetalheFragment(Principal principal, Model model) {
@@ -71,6 +77,12 @@ public class PerfilController {
         return "fragments/perfil-detalhe :: perfilDetalhe";
     }
 
+    /**
+     * Endpoint para exibir o fragmento do avatar do usuário.
+     * @param principal
+     * @param model
+     * @return
+     */
     @HxRequest
     @GetMapping("/perfil/editar")
     public String editarPerfilForm(Principal principal, Model model) {
@@ -82,6 +94,15 @@ public class PerfilController {
         return "fragments/modal-editar-perfil :: fragment"; // nome correto do fragmento
     }
 
+    /**
+     * Endpoint para editar o perfil do usuário.
+     * @param nome
+     * @param email
+     * @param avatarUrl
+     * @param principal
+     * @param model
+     * @return
+     */
     @HxRequest
     @PostMapping("/perfil/editar")
     public String editarPerfilPost(
@@ -147,7 +168,6 @@ public class PerfilController {
         model.addAttribute("perfil", usuarioParaAtualizar);
 
         // Retorna um fragmento HTML que irá substituir o #avatar-display na página.
-        // É uma boa prática ter um fragmento específico para isso.
-        return "fragments/avatar-display :: fragment";
+        return "fragments/avatar-display :: avatarDisplay";
     }
 }
