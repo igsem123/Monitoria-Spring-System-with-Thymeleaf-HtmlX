@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PresencaService {
@@ -33,6 +34,8 @@ public class PresencaService {
                 .flatMap(monitoria -> repository.findAllByMonitoria(monitoria).stream())
                 .toList();
 
+        System.out.println("Total de presencas: " + presencaList.size());
+
         if (presencaList.size() < startItem) {
             presencaList = Collections.emptyList();
         } else {
@@ -41,5 +44,33 @@ public class PresencaService {
         }
 
         return new PageImpl<>(presencaList, PageRequest.of(currentPage, pageSize), presencaList.size());
+    }
+
+    public Optional<Presenca> buscarPorId(Long id) {
+        return repository.findById(id);
+    }
+
+    public void salvar(Presenca presenca) {
+        if (presenca.getId() == null) {
+            Monitoria monitoria = monitoriaRepository.findById(presenca.getMonitoria().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Monitoria não encontrada"));
+            presenca.setMonitoria(monitoria);
+        }
+
+        // Verifico se a data é válida
+        if (presenca.getData() == null) {
+            throw new IllegalArgumentException("A data da presença não pode ser nula.");
+        }
+
+        // Verifico se já não existe uma presença para a mesma data e monitoria
+        if (presenca.getId() != null) {
+            Presenca existingPresenca = repository.findByDataAndMonitoria(presenca.getData(), presenca.getMonitoria());
+            if (existingPresenca != null && !existingPresenca.getId().equals(presenca.getId())) {
+                throw new IllegalArgumentException("Já existe uma presença registrada para esta data e monitoria.");
+            }
+        }
+
+        // Salvo a presença
+        repository.save(presenca);
     }
 }

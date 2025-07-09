@@ -30,6 +30,9 @@ public class PresencaController {
     @Autowired
     UsuarioService usuarioService;
 
+    @Autowired
+    MonitoriaService monitoriaService;
+
     @GetMapping
     public String listarPresencas(
             Model model,
@@ -59,5 +62,54 @@ public class PresencaController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         return "/presenca/listaPresencas";
+    }
+
+    @GetMapping("/detalhes")
+    public String detalhesPresenca(
+            @RequestParam("id") Long id,
+            Model model,
+            Principal principal
+    ) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        String email = principal.getName();
+        Usuario monitor = usuarioService.buscarPorEmail(email);
+
+        Optional<Presenca> presenca = presencaService.buscarPorId(id);
+        if (presenca.isPresent()) {
+            model.addAttribute("presenca", presenca.get());
+            return "/presenca/detalhesPresenca";
+        } else {
+            model.addAttribute("errorMessage", "Presença não encontrada ou você não tem permissão para visualizá-la.");
+            return "/error/404";
+        }
+    }
+
+    @GetMapping("/registrar")
+    public String registrarPresenca(
+            @RequestParam("monitoriaId") Long monitoriaId,
+            Model model,
+            Principal principal
+    ) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        String email = principal.getName();
+        Usuario monitor = usuarioService.buscarPorEmail(email);
+
+        Monitoria monitoria = monitoriaService.buscarPorId(monitoriaId);
+        if (monitoria != null && monitoria.getMonitor().getId().equals(monitor.getId())) {
+            Presenca presenca = new Presenca();
+            presenca.setMonitoria(monitoria);
+            presencaService.salvar(presenca);
+            model.addAttribute("successMessage", "Presença registrada com sucesso!");
+        } else {
+            model.addAttribute("errorMessage", "Monitoria não encontrada ou você não tem permissão para registrar presença.");
+        }
+
+        return "redirect:/presenca";
     }
 }
