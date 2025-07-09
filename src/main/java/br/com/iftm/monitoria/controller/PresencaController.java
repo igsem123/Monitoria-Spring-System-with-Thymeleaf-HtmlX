@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -79,10 +80,11 @@ public class PresencaController {
         return  "fragments/presenca/modal-criacao-presenca :: modalCriacaoPresenca";
     }
 
-    @HxRequest
     @PostMapping
     public String registrarPresenca(
             @RequestParam("monitoriaId") Long monitoriaId,
+            @RequestParam("dataPresenca") String dataPresenca,
+            @RequestParam("qtdAlunosPresentes") Integer qtdAlunosPresentes,
             Model model,
             Principal principal
     ) {
@@ -97,6 +99,12 @@ public class PresencaController {
         if (monitoria != null && monitoria.getMonitor().getId().equals(monitor.getId())) {
             Presenca presenca = new Presenca();
             presenca.setMonitoria(monitoria);
+
+            // Converto a data para LocalDate
+            LocalDate data = LocalDate.parse(dataPresenca);
+            presenca.setData(data);
+
+            presenca.setQtdAlunosPresentes(qtdAlunosPresentes);
             presencaService.salvar(presenca);
             model.addAttribute("successMessage", "Presença registrada com sucesso!");
         } else {
@@ -106,7 +114,7 @@ public class PresencaController {
         return "redirect:/presenca";
     }
 
-    @DeleteMapping("/excluir")
+    @PostMapping("/excluir")
     public String excluirPresenca(
             @RequestParam("presencaId") Long presencaId,
             Model model

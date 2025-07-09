@@ -43,7 +43,8 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Monitoria
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status da Monitoria
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status da
+                        Monitoria
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Professor
                     </th>
@@ -72,12 +73,13 @@
                     <td class="px-6 py-4 whitespace-nowrap text-gray-800"
                         th:text="${#temporals.format(presenca.data, 'dd/MM/yyyy')}"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                        <a th:if="${presenca.monitoria.status != presenca.monitoria.status.ENCERRADA}" th:href="@{/presenca/editar/{id}(id=${presenca.id})}"
+                        <a th:if="${presenca.monitoria.status != presenca.monitoria.status.ENCERRADA}"
+                           th:href="@{/presenca/editar/{id}(id=${presenca.id})}"
                            class="text-blue-600 hover:text-blue-800 font-semibold mr-4">Editar</a>
-                        <form th:action="@{/presenca/excluir/{id}(id=${presenca.id})}" method="post"
-                              class="inline-block">
-                            <button type="submit"
-                                    class="text-red-600 hover:text-red-800 font-semibold">Excluir
+                        <form th:action="@{/presenca/excluir(presencaId=${presenca.id})}" method="post"
+                              style="display:inline;">
+                            <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
+                                Excluir
                             </button>
                         </form>
                     </td>

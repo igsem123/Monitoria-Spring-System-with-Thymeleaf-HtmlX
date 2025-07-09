@@ -1,6 +1,7 @@
 package br.com.iftm.monitoria.config;
 
 
+import br.com.iftm.monitoria.model.UsuarioLogado;
 import br.com.iftm.monitoria.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,25 +50,12 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(UsuarioRepository repository) {
         return username -> repository.findByEmail(username)
-                .map(usuario -> User.builder()
-                        .username(usuario.getEmail())
-                        .password(usuario.getSenha())
-                        .roles(normalizarPapel(usuario.getPapel().getNome()))
-                        .build())
+                .map(UsuarioLogado::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    private String normalizarPapel(String papelNome) {
-        return switch (papelNome.toLowerCase()) {
-            case "administrador" -> "ADMIN";
-            case "professor" -> "PROFESSOR";
-            case "monitor" -> "MONITOR";
-            default -> throw new IllegalArgumentException("Papel desconhecido: " + papelNome);
-        };
     }
 }

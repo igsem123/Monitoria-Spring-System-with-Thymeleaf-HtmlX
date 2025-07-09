@@ -1,27 +1,62 @@
 <!-- fragments/menu.html -->
 <div th:fragment="menu"
-     class="w-full bg-white text-gray-700 p-4 shadow-md mb-6" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-    <div class="flex justify-between items-center max-w-6xl mx-auto">
-        <div class="text-xl font-bold">
+     class="w-full bg-white text-gray-700 shadow-md mb-6"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <div class="flex justify-between items-center max-w-6xl mx-auto h-16">
+        <!-- Logo -->
+        <div class="text-xl font-bold px-4">
             <img src="/images/logos/logo-iftm-short.png" alt="Logo IFTM" class="w-8 h-8 object-contain">
         </div>
-        <div class="space-x-6 flex items-center">
-            <a href="/index" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Início</a>
-            <div sec:authorize="hasRole('ADMIN') or hasRole('PROFESSOR')">
-                <a href="/usuarios" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Usuários</a>
+
+        <!-- Links -->
+        <div class="flex h-full">
+            <div class="h-full hover:bg-green-100 flex items-center px-4 transition">
+                <a href="/index" class="hover:underline hover:text-green-700">Início</a>
             </div>
-            <a href="/monitorias" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Monitorias</a>
-            <a href="/disciplinas" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Disciplinas</a>
-            <div sec:authorize="hasRole('ADMIN') or hasRole('MONITOR')">
-                <a href="/presenca" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Presenças</a>
+
+            <div sec:authorize="hasRole('ADMIN') or hasRole('PROFESSOR')"
+                 class="h-full hover:bg-green-100 flex items-center px-4 transition">
+                <a href="/usuarios" class="hover:underline hover:text-green-700">Usuários</a>
             </div>
-            <a class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Relatórios</a>
-            <a href="/perfil" class="hover:underline hover:bg-green-100 hover:text-green-700 px-2 py-1 rounded transition">Meu Perfil</a>
-            <form th:action="@{/logout}" method="post" class="inline">
-                <button type="submit" class="hover:underline hover:bg-red-100 text-red-600 hover:text-red-700 px-2 py-1 rounded transition cursor-pointer">
+
+            <div class="h-full hover:bg-green-100 flex items-center px-4 transition">
+                <a href="/monitorias" class="hover:underline hover:text-green-700">Monitorias</a>
+            </div>
+
+            <div class="h-full hover:bg-green-100 flex items-center px-4 transition">
+                <a href="/disciplinas" class="hover:underline hover:text-green-700">Disciplinas</a>
+            </div>
+
+            <div sec:authorize="hasRole('ADMIN') or hasRole('MONITOR')"
+                 class="h-full hover:bg-green-100 flex items-center px-4 transition">
+                <a href="/presenca" class="hover:underline hover:text-green-700">Presenças</a>
+            </div>
+
+            <div class="h-full hover:bg-green-100 flex items-center px-4 transition">
+                <a class="hover:underline hover:text-green-700">Relatórios</a>
+            </div>
+
+            <div class="h-full hover:bg-green-100 flex items-center px-4 transition">
+                <a href="/perfil" class="hover:underline hover:text-green-700">Meu Perfil</a>
+            </div>
+
+            <form th:action="@{/logout}" method="post"
+                  class="h-full hover:bg-red-100 flex items-center px-4 transition">
+                <button type="submit" class="text-red-600 hover:text-red-700 hover:underline">
                     Sair
                 </button>
             </form>
+        </div>
+
+        <!-- Avatar do perfil -->
+        <div class="flex items-center space-x-2">
+            <img th:src="@{${#authentication.principal.avatarPath}}" alt="Avatar"
+                 class="w-10 h-10 rounded-full border border-green-300 mr-2">
+            <div class="flex flex-col">
+                <span class="font-semibold" th:text="${#authentication.principal.usuario.nome}"></span>
+                <span class="text-xs text-gray-500" th:text="${#authentication.principal.usuario.papel.nome}"></span>
+            </div>
         </div>
     </div>
 </div>

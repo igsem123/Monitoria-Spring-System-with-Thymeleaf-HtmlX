@@ -67,6 +67,7 @@ public class UsuarioController {
             usuario.setPapel(papelMonitor);
         }
 
+        usuario.setAvatarPath("/images/avatars/default.png");
         usuarioService.salvar(usuario);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário salvo com sucesso!");
 
