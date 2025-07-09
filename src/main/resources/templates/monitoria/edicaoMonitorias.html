@@ -35,29 +35,40 @@
             <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
             <select id="status" name="status" required
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
-                <option value="" disabled selected>Selecione o status</option>
-                <option th:each="status : ${statusMonitorias}" th:value="${status}" th:text="${status}"></option>
+                <option value="" disabled
+                        th:selected="${monitoria.status == null}">Selecione o status
+                </option>
+
+                <option th:each="status : ${statusMonitorias}"
+                        th:value="${status.name()}"
+                        th:text="${status}"
+                        th:selected="${status.name()} == ${monitoria.status?.name()}">
+                </option>
+
             </select>
         </div>
         <div>
             <label for="ano" class="block text-sm font-medium text-gray-700">Ano</label>
             <input type="number" id="ano" name="ano" required
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-            th:value="${monitoria.ano}" placeholder="Digite o ano">
+                   th:value="${monitoria.ano}" placeholder="Digite o ano">
         </div>
         <div>
             <label for="semestre" class="block text-sm font-medium text-gray-700">Semestre</label>
             <input type="number" id="semestre" name="semestre" required
                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
-            th:value="${monitoria.semestre}" placeholder="Digite o semestre">
+                   th:value="${monitoria.semestre}" placeholder="Digite o semestre">
         </div>
         <div>
             <label for="professor" class="block text-sm font-medium text-gray-700">Professor</label>
             <select id="professor" name="professor" required
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                 <option value="" disabled selected>Selecione um professor</option>
-                <option th:each="professor : ${professores}" th:value="${professor.id}"
-                        th:text="${professor.nome}"></option>
+                <option th:each="professor : ${professores}"
+                        th:value="${professor.id}"
+                        th:text="${professor.nome}"
+                        th:selected="${professor.nome}">
+                </option>
             </select>
         </div>
         <div>
@@ -65,8 +76,11 @@
             <select id="disciplina" name="disciplina" required
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                 <option value="" disabled selected>Selecione uma disciplina</option>
-                <option th:each="disciplina : ${disciplinas}" th:value="${disciplina.id}"
-                        th:text="${disciplina.nome}"></option>
+                <option th:each="disciplina : ${disciplinas}"
+                        th:value="${disciplina.id}"
+                        th:text="${disciplina.nome}"
+                        th:selected="${disciplina.nome}">
+                </option>
             </select>
         </div>
         <div>
@@ -74,8 +88,11 @@
             <select id="monitor" name="monitor"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm">
                 <option value="" disabled selected>Selecione um monitor (opcional)</option>
-                <option th:each="monitor : ${monitores}" th:value="${monitor.id}"
-                        th:text="${monitor.nome}"></option>
+                <option th:each="monitor : ${monitores}"
+                        th:value="${monitor.id}"
+                        th:text="${monitor.nome}"
+                        th:selected="${monitor.id} == ${monitoria.monitor?.id}">
+                </option>
             </select>
         </div>
         <div class="col-span-2 mb-5">
@@ -99,6 +116,5 @@
         Cadastrar Nova Monitoria
     </a>
 </div>
-
 </body>
 </html>

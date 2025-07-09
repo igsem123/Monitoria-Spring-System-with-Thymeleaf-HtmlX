@@ -61,27 +61,59 @@ public class MonitoriaService {
         return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
     }
 
+    public List<Monitoria> buscarMonitoriasDoMonitorAtivas(Usuario monitor) {
+        return repository.findByMonitorIdAndStatus(monitor.getId(), StatusMonitoria.ATIVA);
+    }
+
     public void salvar(Monitoria monitoria) {
         if (monitoria.getAno() == null || monitoria.getAno() <= 0) {
             throw new RuntimeException("Ano é obrigatório e deve ser maior que zero!");
         }
+
         if (monitoria.getSemestre() == null || monitoria.getSemestre() <= 0) {
             throw new RuntimeException("Semestre é obrigatório e deve ser maior que zero!");
         }
+
         if (monitoria.getDisciplina() == null || monitoria.getDisciplina().getId() == null) {
             throw new RuntimeException("Disciplina é obrigatória!");
         }
 
+        if (monitoria.getStatus() == null || monitoria.getStatus().toString().isEmpty()) {
+            throw new RuntimeException("Status é obrigatório!");
+        }
+
         if (monitoria.getMonitor() == null) {
             monitoria.setStatus(StatusMonitoria.ABERTA);
-        } else {
-            monitoria.setStatus(StatusMonitoria.ATIVA);
         }
 
         try {
             repository.save(monitoria);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao salvar monitoria: " + e.getMessage(), e);
+        }
+    }
+
+    public void editar(Monitoria monitoria) {
+        if (monitoria.getAno() == null || monitoria.getAno() <= 0) {
+            throw new RuntimeException("Ano é obrigatório e deve ser maior que zero!");
+        }
+
+        if (monitoria.getSemestre() == null || monitoria.getSemestre() <= 0) {
+            throw new RuntimeException("Semestre é obrigatório e deve ser maior que zero!");
+        }
+
+        if (monitoria.getDisciplina() == null || monitoria.getDisciplina().getId() == null) {
+            throw new RuntimeException("Disciplina é obrigatória!");
+        }
+
+        if (monitoria.getStatus() == null || monitoria.getStatus().toString().isEmpty()) {
+            throw new RuntimeException("Status é obrigatório!");
+        }
+
+        try {
+            repository.save(monitoria);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao editar monitoria: " + e.getMessage(), e);
         }
     }
 
@@ -127,7 +159,7 @@ public class MonitoriaService {
 
     @Transactional
     public void deletar(Long id) {
-    Monitoria monitoria = repository.findById(id)
+        Monitoria monitoria = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Monitoria não encontrada"));
 
         if (monitoria.getMonitor() != null) {

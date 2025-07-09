@@ -73,4 +73,13 @@ public class PresencaService {
         // Salvo a presença
         repository.save(presenca);
     }
+
+    public boolean excluir(Long presencaId) {
+        try {
+            repository.deleteById(presencaId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }

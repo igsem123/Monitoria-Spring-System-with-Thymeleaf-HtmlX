@@ -48,7 +48,6 @@
             <th class="px-4 py-2 border border-gray-200">Semestre</th>
             <th class="px-4 py-2 border border-gray-200">Professor</th>
             <th class="px-4 py-2 border border-gray-200">Disciplina</th>
-            <th class="px-4 py-2 border border-gray-200">Descrição</th>
             <th class="px-4 py-2 border border-gray-200">Monitor</th>
             <th class="px-4 py-2 border border-gray-200 rounded-tr-lg">Ações</th>
         </tr>
@@ -62,12 +61,10 @@
             <td class="px-4 py-2 border" th:text="${monitoria.semestre}"></td>
             <td class="px-4 py-2 border" th:text="${monitoria.professor.nome}"></td>
             <td class="px-4 py-2 border" th:text="${monitoria.disciplina.nome}"></td>
-            <td class="px-4 py-2 border" th:text="${monitoria.descricao}"></td>
             <td class="px-4 py-2 border"
                 th:text="${monitoria.monitor != null ? monitoria.monitor.nome : 'Sem monitor'}"></td>
             <td class="px-4 py-2 border">
-                <div class="flex w-full items-center gap-4 justify-start">
-
+                <div class="flex w-full items-center gap-4 justify-center">
                     <th:block
                             th:if="${usuarioLogado != null and (usuarioLogado.papel.nome == 'Administrador' or usuarioLogado.papel.nome == 'Professor')}">
 
@@ -92,7 +89,7 @@
                             </button>
                         </form>
                         <form th:action="@{/monitorias/encerrar/{id}(id=${monitoria.id})}" method="post"
-                              th:if="${monitoria.status.name() == 'ABERTA' or monitoria.status.name() == 'ATIVA'}"
+                              th:if="${monitoria.status.name() == 'ATIVA'}"
                               class="inline-block">
                             <button type="submit" class="text-violet-500 hover:text-violet-700"
                                     title="Encerrar Monitoria">

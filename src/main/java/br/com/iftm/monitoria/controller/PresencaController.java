@@ -6,14 +6,13 @@ import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.service.MonitoriaService;
 import br.com.iftm.monitoria.service.PresencaService;
 import br.com.iftm.monitoria.service.UsuarioService;
+import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -64,9 +63,9 @@ public class PresencaController {
         return "/presenca/listaPresencas";
     }
 
-    @GetMapping("/detalhes")
-    public String detalhesPresenca(
-            @RequestParam("id") Long id,
+    @HxRequest
+    @GetMapping("/cadastrar")
+    public String cadastrarPresenca(
             Model model,
             Principal principal
     ) {
@@ -76,18 +75,12 @@ public class PresencaController {
 
         String email = principal.getName();
         Usuario monitor = usuarioService.buscarPorEmail(email);
-
-        Optional<Presenca> presenca = presencaService.buscarPorId(id);
-        if (presenca.isPresent()) {
-            model.addAttribute("presenca", presenca.get());
-            return "/presenca/detalhesPresenca";
-        } else {
-            model.addAttribute("errorMessage", "Presença não encontrada ou você não tem permissão para visualizá-la.");
-            return "/error/404";
-        }
+        model.addAttribute("monitorias", monitoriaService.buscarMonitoriasDoMonitorAtivas(monitor));
+        return  "fragments/presenca/modal-criacao-presenca :: modalCriacaoPresenca";
     }
 
-    @GetMapping("/registrar")
+    @HxRequest
+    @PostMapping
     public String registrarPresenca(
             @RequestParam("monitoriaId") Long monitoriaId,
             Model model,
@@ -108,6 +101,20 @@ public class PresencaController {
             model.addAttribute("successMessage", "Presença registrada com sucesso!");
         } else {
             model.addAttribute("errorMessage", "Monitoria não encontrada ou você não tem permissão para registrar presença.");
+        }
+
+        return "redirect:/presenca";
+    }
+
+    @DeleteMapping("/excluir")
+    public String excluirPresenca(
+            @RequestParam("presencaId") Long presencaId,
+            Model model
+    ) {
+        if (presencaService.excluir(presencaId)) {
+            model.addAttribute("successMessage", "Presença deletada com sucesso!");
+        } else {
+            model.addAttribute("errorMessage", "Erro ao deletar a presença.");
         }
 
         return "redirect:/presenca";

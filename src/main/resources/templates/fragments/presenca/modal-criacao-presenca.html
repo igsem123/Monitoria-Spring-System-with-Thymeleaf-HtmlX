@@ -2,8 +2,9 @@
 <th:block th:fragment="modalCriacaoPresenca">
 
 <!-- Modal para registrar presença -->
-    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" id="modal-container-presenca">
-        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50" id="modal-container-presenca"
+         onclick="if(event.target === this) this.remove()">
+        <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md" onclick="event.stopPropagation();">
 
             <button
                     hx-on:click="htmx.closest(this, '#modal-container').innerHTML = ''"
@@ -14,9 +15,13 @@
                 </svg>
             </button>
 
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">Registrar Presença</h2>
-            <form th:action="@{/presenca/cadastrar}" method="post" hx-post="/presenca/cadastrar"
-                  hx-target="#modal-container-presenca" hx-swap="innerHTML">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">Registrar Lista de Presença</h2>
+            <form th:action="@{/presenca}"
+                  method="post"
+                  hx-post="/presenca"
+                  hx-target="#modal-container-presenca"
+                  hx-swap="innerHTML"
+            >
                 <div class="mb-4">
                     <label for="monitoria" class="block text-gray-700 font-medium mb-2">Monitoria</label>
                     <select id="monitoria" name="monitoria.id"
@@ -29,9 +34,9 @@
                 </div>
                 <div class="mb-4">
                     <label for="data" class="block text-gray-700 font-medium mb-2">Data</label>
-                    <input type="text" id="data" name="data"
+                    <input type="date" id="data" name="data"
                            class="componentedata w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition duration-200 ease-in-out"
-                           required readonly/>
+                           required/>
                 </div>
                 <div class="mb-4">
                     <label for="qtdAlunosPresentes" class="block text-gray-700 font-medium mb-2">Quantidade de Alunos
@@ -47,8 +52,7 @@
                     </button>
                     <button type="button"
                             class="ml-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200 ease-in-out shadow-md"
-                            hx-get="/presenca/listarPresencas" hx-target="#modal-container-presenca"
-                            hx-swap="innerHTML">
+                            onclick="document.getElementById('modal-container-presenca').remove()">
                         Cancelar
                     </button>
                 </div>

@@ -18,8 +18,8 @@ VALUES ('Estrutura de Dados', 'ED123'),
 
 -- MONITORIAS
 INSERT INTO monitoria (status, horario, ano, semestre, descricao, professor_id, monitor_id, disciplina_id)
-VALUES (1, 'Segundas 10h', 2025, 1, null, 1, 2, 1),
-       (0, 'Quartas 14h', 2024, 2, null, 1, 2, 2);
+VALUES ('ATIVA', 'Segundas 10h', 2025, 1, null, 1, 2, 1),
+       ('ABERTA', 'Quartas 14h', 2024, 2, null, 1, null, 2);
 
 -- PRESENÇAS
 INSERT INTO presenca (nr_alunos, data, monitoria_id)

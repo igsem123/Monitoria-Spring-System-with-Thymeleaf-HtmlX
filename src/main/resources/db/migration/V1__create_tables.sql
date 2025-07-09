@@ -19,7 +19,7 @@ CREATE TABLE disciplina (
 
 CREATE TABLE monitoria (
                            id SERIAL PRIMARY KEY,
-                           status INT NOT NULL CHECK (status IN (0, 1)), -- 0: Encerrada, 1: Ativa
+                           status VARCHAR(255) NOT NULL CHECK (status IN ('ENCERRADA', 'ABERTA', 'ATIVA')),
                            horario VARCHAR(50),
                            ano INT NOT NULL,
                            semestre INT NOT NULL,
