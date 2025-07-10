@@ -1,0 +1,109 @@
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 7.0.3-41034ca841d452f3305ba55b9042260aaa1ab5dd  -->
+<jasperReport name="monitoria_relatorio" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="12345678-1234-1234-1234-1234567890ab">
+	<parameter name="logoPath" class="java.lang.String"/>
+	<field name="disciplina" class="java.lang.String"/>
+	<field name="monitor" class="java.lang.String"/>
+	<field name="professor" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="ano" class="java.lang.Integer"/>
+	<field name="semestre" class="java.lang.Integer"/>
+	<field name="horario" class="java.lang.String"/>
+	<title height="80">
+		<element kind="staticText" uuid="1e870ad2-d9b5-4f8e-a5c1-f8e594d3dfc7" x="0" y="50" width="555" height="30" forecolor="#2F9E41" fontName="Bahnschrift" fontSize="16.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Relatório de Monitorias]]></text>
+		</element>
+		<element kind="image" uuid="01037dee-30d7-46f2-9c6a-d830e69ae2d6" x="252" y="0" width="50" height="50" linkType="None" linkTarget="Self" hImageAlign="Center" vImageAlign="Middle">
+			<expression><![CDATA[$P{logoPath}]]></expression>
+		</element>
+	</title>
+	<columnHeader height="20">
+		<element kind="staticText" uuid="90241ac2-73f5-413d-948b-968ef3d6644d" x="0" y="0" width="100" height="20" fontName="Bahnschrift" bold="true" hTextAlign="Center">
+			<text><![CDATA[Disciplina]]></text>
+			<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+				<pen lineWidth="0.25"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="0e847623-b2b9-4ba2-b8f2-47daeab1c474" x="100" y="0" width="100" height="20" fontName="Bahnschrift" bold="true" hTextAlign="Center">
+			<text><![CDATA[Monitor]]></text>
+			<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+				<pen lineWidth="0.25"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="df98d37b-cefa-4665-9c79-bf223dcddd9d" x="200" y="0" width="100" height="20" fontName="Bahnschrift" bold="true" hTextAlign="Center">
+			<text><![CDATA[Professor]]></text>
+			<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+				<pen lineWidth="0.25"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="f31e8b64-1af5-4289-bee3-9a7bef7fab64" x="300" y="0" width="60" height="20" fontName="Bahnschrift" bold="true" hTextAlign="Center">
+			<text><![CDATA[Status]]></text>
+			<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+				<pen lineWidth="0.25"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="bbac9d18-c7c9-4514-a674-5bc439e15871" x="360" y="0" width="40" height="20" fontName="Bahnschrift" bold="true" hTextAlign="Center">
+			<text><![CDATA[Ano]]></text>
+			<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+				<pen lineWidth="0.25"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="97ce3b76-6e9d-47c1-a5f1-5883e0ca062b" x="400" y="0" width="40" height="20" fontName="Bahnschrift" bold="true" hTextAlign="Center">
+			<text><![CDATA[Sem]]></text>
+			<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+				<pen lineWidth="0.25"/>
+			</box>
+		</element>
+		<element kind="staticText" uuid="8877860d-6ff7-478b-8423-0cf27a23877b" x="440" y="0" width="115" height="20" fontName="Bahnschrift" bold="true" hTextAlign="Center">
+			<text><![CDATA[Horário]]></text>
+			<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+				<pen lineWidth="0.25"/>
+			</box>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="9b06b68f-3123-4c51-aa48-8fa98e2169fd" x="0" y="0" width="100" height="20" hTextAlign="Center">
+				<expression><![CDATA[$F{disciplina}]]></expression>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.25"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="345d1583-356f-4bf8-9089-a0e0b266b9fc" x="100" y="0" width="100" height="20" hTextAlign="Center">
+				<expression><![CDATA[$F{monitor}]]></expression>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.25"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="515f1189-6a5f-442b-802e-67adbc0aa94d" x="200" y="0" width="100" height="20" hTextAlign="Center">
+				<expression><![CDATA[$F{professor}]]></expression>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.25"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="85f3dfe1-08ee-44d7-a46d-91401376ecf8" x="300" y="0" width="60" height="20" hTextAlign="Center">
+				<expression><![CDATA[$F{status}]]></expression>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.25"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="29bd1838-7809-4cb8-8213-2a6f74c053d9" x="360" y="0" width="40" height="20" hTextAlign="Center">
+				<expression><![CDATA[$F{ano}]]></expression>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.25"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="c21d3138-efc7-41d6-932f-400a3a36ce51" x="400" y="0" width="40" height="20" hTextAlign="Center">
+				<expression><![CDATA[$F{semestre}]]></expression>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.25"/>
+				</box>
+			</element>
+			<element kind="textField" uuid="e927b98c-3ef7-4bb3-81b9-022b1117b0d7" x="440" y="0" width="115" height="20" hTextAlign="Center">
+				<expression><![CDATA[$F{horario}]]></expression>
+				<box topPadding="2" leftPadding="2" bottomPadding="2" rightPadding="2">
+					<pen lineWidth="0.25"/>
+				</box>
+			</element>
+		</band>
+	</detail>
+</jasperReport>

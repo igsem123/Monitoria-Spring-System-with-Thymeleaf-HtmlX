@@ -195,4 +195,12 @@ public class MonitoriaService {
             throw new RuntimeException("Erro ao encerrar monitoria: " + e.getMessage(), e);
         }
     }
+
+    public List<Monitoria> buscarTodos() {
+        List<Monitoria> monitorias = repository.findAll();
+        if (monitorias.isEmpty()) {
+            throw new RuntimeException("Nenhuma monitoria encontrada.");
+        }
+        return monitorias;
+    }
 }
