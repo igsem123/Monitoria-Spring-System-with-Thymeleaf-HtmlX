@@ -21,6 +21,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .requiresChannel(channel -> channel
+                        .anyRequest().requiresSecure()
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/index", "/usuarios/cadastrar", "/css/**", "/js/**", "/images/**", "/swagger-ui").permitAll()
                         .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PROFESSOR")
