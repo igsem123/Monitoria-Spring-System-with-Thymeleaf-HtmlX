@@ -1,0 +1,19 @@
+<!-- fragments/paginacao.html -->
+<th:block th:fragment="paginacao(page, urlBase)">
+    <div class="flex justify-between items-center mt-4">
+        <div>
+            <span class="px-2 text-gray-600"
+                  th:text="'Total de registros: ' + ${page.totalElements}"></span>
+        </div>
+        <nav class="flex space-x-2">
+            <a th:if="${page.hasPrevious()}"
+               th:href="@{${urlBase}(page=${page.number - 1})}"
+               class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Anterior</a>
+            <span class="px-4 py-2 text-gray-600"
+                  th:text="'Página ' + (${page.getNumber() + 1}) + ' de ' + ${page.totalPages}"></span>
+            <a th:if="${page.hasNext()}"
+               th:href="@{${urlBase}(page=${page.number + 1})}"
+               class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Próximo</a>
+        </nav>
+    </div>
+</th:block>
