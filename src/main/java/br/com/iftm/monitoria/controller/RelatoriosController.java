@@ -1,8 +1,10 @@
 package br.com.iftm.monitoria.controller;
 
 import br.com.iftm.monitoria.model.Monitoria;
+import br.com.iftm.monitoria.model.Presenca;
 import br.com.iftm.monitoria.model.dto.MonitoriaRelatorioDTO;
 import br.com.iftm.monitoria.service.MonitoriaService;
+import br.com.iftm.monitoria.service.PresencaService;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.core.io.ClassPathResource;
@@ -26,6 +28,9 @@ public class RelatoriosController {
     @Autowired
     private MonitoriaService monitoriaService;
 
+    @Autowired
+    private PresencaService presencaService;
+
     @GetMapping
     public String listarRelatorios() {
         // Retorna a view de listagem de relatórios
@@ -37,24 +42,29 @@ public class RelatoriosController {
         // Gera o relatório de monitorias
         try {
             List<Monitoria> monitorias = monitoriaService.buscarTodos(); // ou um filtro
+            List<Presenca> presencas = presencaService.buscarTodos();
 
             // Converte para DTO
             List<MonitoriaRelatorioDTO> dados = monitorias.stream()
-                    .map(MonitoriaRelatorioDTO::new)
+                    .map(m -> new MonitoriaRelatorioDTO(m, presencas))
                     .toList();
 
-            // Carrega o .jrxml do resources
+            // Compila os relatórios .jrxml
             InputStream input = new ClassPathResource("reports/monitoria_relatorio.jrxml").getInputStream();
-            JasperReport report = JasperCompileManager.compileReport(input);
+            InputStream subInput = new ClassPathResource("reports/sub_presencas.jrxml").getInputStream();
 
-            // Cria o DataSource
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dados);
+            JasperReport mainReport = JasperCompileManager.compileReport(input);
+            JasperReport subReport = JasperCompileManager.compileReport(subInput);
 
+            // Parâmetros
             String logoPath = new ClassPathResource("reports/logo-iftm.png").getFile().getAbsolutePath();
             Map<String, Object> parameters = new HashMap<>();
             parameters.put("logoPath", logoPath);
+            parameters.put("SUBREPORT_PRESENCAS", subReport);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, dataSource);
+            // Cria o DataSource
+            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dados);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(mainReport, parameters, dataSource);
             byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
 
             return ResponseEntity.ok()

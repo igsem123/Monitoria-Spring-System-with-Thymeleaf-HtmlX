@@ -82,4 +82,8 @@ public class PresencaService {
             return false;
         }
     }
+
+    public List<Presenca> buscarTodos() {
+        return repository.findAll();
+    }
 }
