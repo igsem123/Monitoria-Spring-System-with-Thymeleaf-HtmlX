@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
+    <meta charset="UTF-8">
+    <title>Lista de Relatórios</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Sans:ital,wght@0,100..800;1,100..800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/output.css}"/>
+</head>
+<body class="bg-green-100 text-gray-800 antialiased min-h-screen flex flex-col items-center font-ubuntu">
+<th:block th:replace="~{fragments/menu :: menu}"></th:block>
+<div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center mt-16">
+    <img src="/images/logos/logo-iftm-100px.png" alt="Ícone Relatórios" class="w-20 h-20 object-contain mb-4">
+    <h1 class="text-2xl font-bold text-green-800 mb-1">Lista de Relatórios</h1>
+    <h2 class="text-base text-green-600 mb-6 text-center">Visualize e gere relatórios de monitorias.</h2>
+    <a href="/relatorios/monitorias"
+       class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 font-semibold shadow-md">
+        Gerar Novo Relatório de Monitorias
+    </a>
+    <div id="modal-container"></div>
+</div>
+</body>
+</html>

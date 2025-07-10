@@ -15,7 +15,7 @@
 <div class="w-4/12 container mx-auto mt-10 p-6 bg-white shadow-xl rounded-lg">
     <div class="flex flex-col md:flex-row items-center justify-center p-6 mb-8 bg-gray-100 rounded-lg shadow-md">
         <div class="mb-6 md:mb-0 md:mr-8 flex-shrink-0">
-            <img src="/images/logo-iftm.png" alt="Logo IFTM" class="w-24 h-24 object-contain">
+            <img src="/images/logos/logo-iftm.png" alt="Logo IFTM" class="w-24 h-24 object-contain">
         </div>
         <div class="text-center md:text-left">
             <h1 class="text-3xl font-extrabold text-green-800 mb-2">Minhas Inscrições</h1>
@@ -25,34 +25,36 @@
 
     <div class="bg-white shadow-xl rounded-lg p-6 mb-8 border border-gray-200">
         <ul class="space-y-6">
-            <li th:each="inscricao : ${inscricoes}" class="bg-gray-50 p-6 rounded-lg shadow-md border border-gray-100">
+            <li th:each="inscricao : ${monitoriasInscritas}"
+                class="bg-gray-50 p-6 rounded-lg shadow-md border border-gray-100">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                     <div class="flex-1 mb-4 md:mb-0 md:mr-8 w-full">
-                        <p class="text-lg font-semibold text-gray-800 mb-2">
-                            Disciplina: <span class="font-normal text-green-600"
-                                              th:text="${inscricao.monitoria.disciplina.nome}"></span>
-                        </p>
-                        <p class="text-lg font-semibold text-gray-800 mb-2">
-                            Professor: <span class="font-normal text-green-600"
-                                             th:text="${inscricao.monitoria.professor.nome}"></span>
-                        </p>
-                        <p class="text-lg font-semibold text-gray-800 mb-2">
-                            Ano/Semestre: <span class="font-normal text-green-600"
-                                                th:text="${inscricao.monitoria.ano} + ' / ' + ${inscricao.monitoria.semestre}"></span>
-                        </p>
-                        <p class="text-lg font-semibold text-gray-800 mb-2">
-                            Status: <span class="font-normal text-green-600"
-                                          th:text="${inscricao.monitoria.status}"></span>
-                        </p>
-                        <p class="text-lg font-semibold text-gray-800">
-                            Descrição: <span class="font-normal text-green-600"
-                                             th:text="${inscricao.monitoria.descricao}"></span>
-                        </p>
+                        <div class="grid grid-cols-2 gap-2">
+                            <span class="col-span-1 text-lg font-semibold text-gray-800 mb-2">Disciplina:</span>
+                            <span class="col-span-1 font-normal text-green-600 mb-2"
+                                  th:text="${inscricao.disciplina.nome}"></span>
+
+                            <span class="col-span-1 text-lg font-semibold text-gray-800 mb-2">Professor:</span>
+                            <span class="col-span-1 font-normal text-green-600 mb-2"
+                                  th:text="${inscricao.professor.nome}"></span>
+
+                            <span class="col-span-1 text-lg font-semibold text-gray-800 mb-2">Ano/Semestre:</span>
+                            <span class="col-span-1 font-normal text-green-600 mb-2"
+                                  th:text="${inscricao.ano} + ' / ' + ${inscricao.semestre}"></span>
+
+                            <span class="col-span-1 text-lg font-semibold text-gray-800 mb-2">Status:</span>
+                            <span class="col-span-1 font-normal text-green-600 mb-2"
+                                  th:text="${inscricao.status}"></span>
+
+                            <span class="col-span-1 text-lg font-semibold text-gray-800">Descrição:</span>
+                            <span class="col-span-1 font-normal text-green-600"
+                                  th:text="${inscricao.descricao != null} ? ${inscricao.descricao} : 'Sem descrição'"></span>
+                        </div>
                     </div>
                 </div>
             </li>
         </ul>
-        <div th:if="${#lists.isEmpty(inscricoes)}" class="text-center text-gray-600 py-8">
+        <div th:if="${#lists.isEmpty(monitoriasInscritas)}" class="text-center text-gray-600 py-8">
             <p>Nenhuma inscrição encontrada.</p>
         </div>
     </div>
