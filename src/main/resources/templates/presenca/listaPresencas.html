@@ -74,8 +74,10 @@
                         th:text="${#temporals.format(presenca.data, 'dd/MM/yyyy')}"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-center">
                         <a th:if="${presenca.monitoria.status != presenca.monitoria.status.ENCERRADA}"
-                           th:href="@{/presenca/editar/{id}(id=${presenca.id})}"
-                           class="text-blue-600 hover:text-blue-800 font-semibold mr-4">Editar</a>
+                           th:hx-get="@{/presenca/editar/{id}(id=${presenca.id})}"
+                           hx-target="#modal-container"
+                           hx-trigger="click"
+                           class="text-blue-600 hover:text-blue-800 font-semibold mr-4 cursor-pointer">Editar</a>
                         <form th:action="@{/presenca/excluir(presencaId=${presenca.id})}" method="post"
                               style="display:inline;">
                             <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
@@ -88,17 +90,25 @@
             </table>
         </ul>
 
-        <th:block
-                th:replace="fragments/paginacao :: paginacao(${presencasPage}, '/presenca/listarPresencas')"></th:block>
-    </th:block>
+        <th:block th:replace="fragments/paginacao :: paginacao(${presencasPage}, '/presenca')"></th:block>
 
     <div th:fragment="formPresenca">
         <!-- Seu formulário aqui -->
     </div>
 
+    <div th:fragment="modalEdicaoPresenca">
+        <!-- Modal para edição de presença -->
+    </div>
+
     <div th:if="${presencasPage.isEmpty()}" class="text-center text-gray-600 py-8">
         <p>Nenhuma presença encontrada.</p>
     </div>
+
+    <!-- Mensagens de sucesso -->
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+    <!-- Mensagens de erro -->
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
 
 </div>
 </body>

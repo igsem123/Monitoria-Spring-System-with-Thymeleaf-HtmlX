@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.time.LocalDate;
@@ -38,7 +39,8 @@ public class PresencaController {
             Model model,
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size,
-            Principal principal
+            Principal principal,
+            RedirectAttributes redirectAttributes
     ) {
         if (principal == null) {
             return "redirect:/login";
@@ -52,6 +54,8 @@ public class PresencaController {
 
         Page<Presenca> presencasPage = presencaService.listarTodosPaginado(PageRequest.of(currentPage - 1, pageSize), monitor.getId());
         model.addAttribute("presencasPage", presencasPage);
+        model.addAttribute("successMessage", redirectAttributes.getFlashAttributes().get("successMessage"));
+        model.addAttribute("errorMessage", redirectAttributes.getFlashAttributes().get("errorMessage"));
 
         int totalPages = presencasPage.getTotalPages();
         if (totalPages > 0) {
@@ -77,7 +81,7 @@ public class PresencaController {
         String email = principal.getName();
         Usuario monitor = usuarioService.buscarPorEmail(email);
         model.addAttribute("monitorias", monitoriaService.buscarMonitoriasDoMonitorAtivas(monitor));
-        return  "fragments/presenca/modal-criacao-presenca :: modalCriacaoPresenca";
+        return "fragments/presenca/modal-criacao-presenca :: modalCriacaoPresenca";
     }
 
     @PostMapping
@@ -128,6 +132,7 @@ public class PresencaController {
         return "redirect:/presenca";
     }
 
+    @HxRequest
     @GetMapping("/editar/{id}")
     public String editarPresenca(
             @PathVariable("id") Long id,
@@ -143,12 +148,51 @@ public class PresencaController {
 
         Optional<Presenca> presenca = presencaService.buscarPorId(id);
         if (presenca.isPresent()) {
-            model.addAttribute("presenca", presenca);
+            model.addAttribute("presenca", presenca.get());
             model.addAttribute("monitorias", monitoriaService.buscarMonitoriasDoMonitorAtivas(monitor));
             return "fragments/presenca/modal-edicao-presenca :: modalEdicaoPresenca";
         } else {
             model.addAttribute("errorMessage", "Monitoria não encontrada ou você não tem permissão para editar presença.");
             return "redirect:/presenca";
         }
+    }
+
+    @PostMapping("/atualizar")
+    public String atualizarPresenca(
+            @RequestParam("id") Long id,
+            @RequestParam("monitoriaId") Long monitoriaId,
+            @RequestParam("dataPresenca") String dataPresenca,
+            @RequestParam("qtdAlunosPresentes") Integer qtdAlunosPresentes,
+            Principal principal,
+            RedirectAttributes redirectAttributes
+    ) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        String email = principal.getName();
+        Usuario monitor = usuarioService.buscarPorEmail(email);
+
+        Optional<Presenca> optionalPresenca = presencaService.buscarPorId(id);
+
+        if (optionalPresenca.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Presença não encontrada.");
+            return "redirect:/presenca";
+        }
+
+        Presenca presenca = optionalPresenca.get();
+
+        Monitoria monitoria = monitoriaService.buscarPorId(monitoriaId);
+        if (monitoria != null && monitoria.getMonitor().getId().equals(monitor.getId())) {
+            presenca.setMonitoria(monitoria);
+            presenca.setData(LocalDate.parse(dataPresenca));
+            presenca.setQtdAlunosPresentes(qtdAlunosPresentes);
+            presencaService.salvar(presenca);
+            redirectAttributes.addFlashAttribute("successMessage", "Presença atualizada com sucesso!");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Monitoria não encontrada ou acesso negado.");
+        }
+
+        return "redirect:/presenca";
     }
 }
