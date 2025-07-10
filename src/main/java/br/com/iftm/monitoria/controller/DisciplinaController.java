@@ -5,8 +5,7 @@ import br.com.iftm.monitoria.service.DisciplinaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,6 +16,7 @@ public class DisciplinaController {
     @Autowired
     private DisciplinaService service;
 
+    // Lista todas as disciplinas
     @GetMapping
     public String listarDisciplinas(Model model) {
         List<Disciplina> disciplinas = service.listarTodos();
@@ -29,6 +29,13 @@ public class DisciplinaController {
     public String mostrarFormularioCadastro(Model model) {
         Disciplina novaDisciplina = new Disciplina();
         model.addAttribute("disciplina", novaDisciplina);
-        return "cadastroDisciplina"; // Nome da View HTML para o formulário
+        return "cadastroDisciplina";
+    }
+
+    // Salva a disciplina enviada pelo formulário
+    @PostMapping("/salvar")
+    public String salvarDisciplina(@ModelAttribute("disciplina") Disciplina disciplina) {
+        service.salvar(disciplina);
+        return "redirect:/disciplinas";
     }
 }

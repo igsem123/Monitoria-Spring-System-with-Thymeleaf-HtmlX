@@ -16,4 +16,9 @@ public class DisciplinaService {
     public List<Disciplina> listarTodos() {
         return repository.findAll();
     }
+
+    // Método para salvar disciplina
+    public void salvar(Disciplina disciplina) {
+        repository.save(disciplina);
+    }
 }
