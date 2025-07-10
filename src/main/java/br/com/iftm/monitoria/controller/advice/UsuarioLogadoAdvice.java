@@ -1,4 +1,4 @@
-package br.com.iftm.monitoria.advice;
+package br.com.iftm.monitoria.controller.advice;
 
 import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.repository.UsuarioRepository;

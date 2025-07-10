@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-components">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <script src="https://unpkg.com/htmx.org@1.9.5"></script>
     <meta charset="UTF-8">
@@ -16,21 +15,15 @@
 </head>
 <body class="bg-green-100 text-gray-800 antialiased min-h-screen flex flex-col items-center font-ubuntu">
 <th:block th:replace="~{fragments/menu :: menu}"></th:block>
-<div class="w-8/12 bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-4">
-    <div class="flex flex-col md:flex-row items-center justify-between mb-6">
-        <img src="/images/logos/logo-iftm-100px.png" alt="Ícone Relatórios" class="w-24 h-24 object-contain mr-6">
-        <div class="text-center md:text-left">
-            <h1 class="text-3xl font-extrabold text-green-800 mb-2">Lista de Relatórios</h1>
-            <h2 class="text-lg text-green-600">Visualize e gere relatórios de monitorias.</h2>
-        </div>
-        <div class="ml-auto">
-            <a href="/relatorios/monitorias"
-                    class="px-4 py-2 ml-6 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">
-                Gerar Novo Relatório de Monitorias
-            </a>
-            <div id="modal-container"></div>
-        </div>
-    </div>
+<div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center mt-16">
+    <img src="/images/logos/logo-iftm-100px.png" alt="Ícone Relatórios" class="w-20 h-20 object-contain mb-4">
+    <h1 class="text-2xl font-bold text-green-800 mb-1">Lista de Relatórios</h1>
+    <h2 class="text-base text-green-600 mb-6 text-center">Visualize e gere relatórios de monitorias.</h2>
+    <a href="/relatorios/monitorias"
+       class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200 font-semibold shadow-md">
+        Gerar Novo Relatório de Monitorias
+    </a>
+    <div id="modal-container"></div>
 </div>
 </body>
 </html>

@@ -127,4 +127,28 @@ public class PresencaController {
 
         return "redirect:/presenca";
     }
+
+    @GetMapping("/editar/{id}")
+    public String editarPresenca(
+            @PathVariable("id") Long id,
+            Model model,
+            Principal principal
+    ) {
+        if (principal == null) {
+            return "redirect:/login";
+        }
+
+        String email = principal.getName();
+        Usuario monitor = usuarioService.buscarPorEmail(email);
+
+        Optional<Presenca> presenca = presencaService.buscarPorId(id);
+        if (presenca.isPresent()) {
+            model.addAttribute("presenca", presenca);
+            model.addAttribute("monitorias", monitoriaService.buscarMonitoriasDoMonitorAtivas(monitor));
+            return "fragments/presenca/modal-edicao-presenca :: modalEdicaoPresenca";
+        } else {
+            model.addAttribute("errorMessage", "Monitoria não encontrada ou você não tem permissão para editar presença.");
+            return "redirect:/presenca";
+        }
+    }
 }
