@@ -5,6 +5,7 @@ import br.com.iftm.monitoria.model.Presenca;
 import br.com.iftm.monitoria.model.dto.MonitoriaRelatorioDTO;
 import br.com.iftm.monitoria.service.MonitoriaService;
 import br.com.iftm.monitoria.service.PresencaService;
+import br.com.iftm.monitoria.service.RelatorioService;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.core.io.ClassPathResource;
@@ -26,10 +27,7 @@ import java.util.Map;
 public class RelatoriosController {
 
     @Autowired
-    private MonitoriaService monitoriaService;
-
-    @Autowired
-    private PresencaService presencaService;
+    private RelatorioService relatorioService;
 
     @GetMapping
     public String listarRelatorios() {
@@ -39,34 +37,8 @@ public class RelatoriosController {
 
     @GetMapping("/monitorias")
     public ResponseEntity<byte[]> gerarRelatorioMonitorias() {
-        // Gera o relatório de monitorias
         try {
-            List<Monitoria> monitorias = monitoriaService.buscarTodos(); // ou um filtro
-            List<Presenca> presencas = presencaService.buscarTodos();
-
-            // Converte para DTO
-            List<MonitoriaRelatorioDTO> dados = monitorias.stream()
-                    .map(m -> new MonitoriaRelatorioDTO(m, presencas))
-                    .toList();
-
-            // Compila os relatórios .jrxml
-            InputStream input = new ClassPathResource("reports/monitoria_relatorio.jrxml").getInputStream();
-            InputStream subInput = new ClassPathResource("reports/sub_presencas.jrxml").getInputStream();
-
-            JasperReport mainReport = JasperCompileManager.compileReport(input);
-            JasperReport subReport = JasperCompileManager.compileReport(subInput);
-
-            // Parâmetros
-            String logoPath = new ClassPathResource("reports/logo-iftm.png").getFile().getAbsolutePath();
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("logoPath", logoPath);
-            parameters.put("SUBREPORT_PRESENCAS", subReport);
-
-            // Cria o DataSource
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(dados);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(mainReport, parameters, dataSource);
-            byte[] pdf = JasperExportManager.exportReportToPdf(jasperPrint);
-
+            byte[] pdf = relatorioService.gerarRelatorioMonitorias();
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=monitorias.pdf")
                     .contentType(MediaType.APPLICATION_PDF)
