@@ -49,7 +49,7 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
             <tr th:each="disciplina, iStat : ${disciplinasPage.content}"
-                th:class="${iStat.even ? 'bg-gray-50' : 'bg-white'}">
+                th:class="${iStat.even ? 'bg-gray-100' : 'bg-white'}">
                 <td class="px-6 py-4 border whitespace-nowrap text-sm text-gray-900 text-center"
                     th:text="${disciplina.id}"></td>
                 <td class="px-6 py-4 border whitespace-nowrap text-sm text-gray-900" th:text="${disciplina.nome}"></td>
@@ -87,6 +87,14 @@
             </tbody>
         </table>
         <th:block th:replace="fragments/paginacao :: paginacao(${disciplinasPage}, '/disciplinas')"></th:block>
+    </div>
+
+    <div th:if="${successMessage}"
+         class="bg-gray-50 border-l-4 border-green-500 text-green-700 p-4 mb-4 mt-4 rounded">
+        <p th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mt-4 rounded">
+        <p th:text="${errorMessage}"></p>
     </div>
 </div>
 </body>

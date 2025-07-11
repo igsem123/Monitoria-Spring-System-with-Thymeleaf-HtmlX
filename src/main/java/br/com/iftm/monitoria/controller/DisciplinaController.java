@@ -12,8 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -35,7 +33,7 @@ public class DisciplinaController {
 
         Page<Disciplina> disciplinasPage = service.listarTodosPaginado(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("disciplinasPage", disciplinasPage);
-        return "disciplina/disciplinas";
+        return "disciplina/listaDisciplinas";
     }
 
     @HxRequest
@@ -103,13 +101,22 @@ public class DisciplinaController {
 
     // Atualiza a disciplina enviada pelo formulário
     @PostMapping("/atualizar")
-    public String atualizarDisciplina(@ModelAttribute("disciplina") Disciplina disciplina) {
+    public String atualizarDisciplina(
+            @ModelAttribute("disciplina") Disciplina disciplina,
+            RedirectAttributes redirectAttributes
+    ) {
         if (disciplina == null || disciplina.getId() == null) {
-            return "redirect:/disciplinas"; // Redireciona se a disciplina for inválida
+            redirectAttributes.addFlashAttribute("errorMessage", "Disciplina inválida.");
+            return "redirect:/disciplinas";
         }
 
-        // Chama o serviço para atualizar a disciplina
-        service.atualizar(disciplina);
+        try {
+            service.atualizar(disciplina);
+            redirectAttributes.addFlashAttribute("successMessage", "Disciplina atualizada com sucesso!");
+        } catch (RuntimeException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Erro ao atualizar disciplina: " + e.getMessage());
+        }
+
         return "redirect:/disciplinas";
     }
 

@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -71,25 +72,19 @@ public class DisciplinaService {
     }
 
     public void atualizar(Disciplina disciplina) {
-        try {
-            if (disciplina != null) {
-                // Verifica se a disciplina já existe
-                Disciplina existente = buscarPorId(disciplina.getId());
-
-                // Se existir, atualiza os campos necessários
-                if (existente != null) {
-                    existente.setNome(disciplina.getNome());
-                    existente.setCodigo(disciplina.getCodigo());
-
-                    // Salva as alterações
-                    repository.save(existente);
-                }
-            } else {
-                throw new IllegalArgumentException("Disciplina inválida.");
-            }
-        } catch (Exception e) {
-            System.err.println("Erro ao atualizar disciplina: " + e.getMessage());
+        if (disciplina == null || disciplina.getId() == null) {
+            throw new IllegalArgumentException("Disciplina inválida.");
         }
+
+        Disciplina existente = buscarPorId(disciplina.getId());
+        if (existente == null) {
+            throw new RuntimeException("Disciplina não encontrada.");
+        }
+
+        existente.setNome(disciplina.getNome());
+        existente.setCodigo(disciplina.getCodigo());
+
+        repository.save(existente);
     }
 
     public String gerarCodigoDisciplina(String nome) {
@@ -130,7 +125,13 @@ public class DisciplinaService {
     }
 
     public Page<Disciplina> listarTodosPaginado(PageRequest pageable) {
-        List<Disciplina> disciplinas = repository.findAll();
+        // Obtém todas as disciplinas e ordena por ID
+        List<Disciplina> disciplinas = repository.findAll()
+            .stream()
+            .sorted(Comparator.comparingLong(Disciplina::getId))
+            .toList();
+
+        // Verifica se a lista de disciplinas está vazia
         if (disciplinas.isEmpty()) {
             return Page.empty(pageable);
         }
