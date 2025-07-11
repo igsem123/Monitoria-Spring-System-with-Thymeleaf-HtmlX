@@ -59,7 +59,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="presenca : ${presencasPage}" class="bg-gray-50 border-b ">
+                <tr th:each="presenca : ${presencasPage.content}" class="bg-gray-50 border-b ">
                     <td class="px-6 py-4 whitespace-nowrap text-gray-800"
                         th:text="${presenca.monitoria.disciplina.nome}"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-800"
@@ -92,24 +92,24 @@
 
         <th:block th:replace="fragments/paginacao :: paginacao(${presencasPage}, '/presenca')"></th:block>
 
-    <div th:fragment="formPresenca">
-        <!-- Seu formulário aqui -->
-    </div>
+        <div th:fragment="formPresenca">
+            <!-- Seu formulário aqui -->
+        </div>
 
-    <div th:fragment="modalEdicaoPresenca">
-        <!-- Modal para edição de presença -->
-    </div>
+        <div th:fragment="modalEdicaoPresenca">
+            <!-- Modal para edição de presença -->
+        </div>
 
-    <div th:if="${presencasPage.isEmpty()}" class="text-center text-gray-600 py-8">
-        <p>Nenhuma presença encontrada.</p>
-    </div>
+        <div th:if="${presencasPage.isEmpty()}" class="text-center text-gray-600 py-8">
+            <p>Nenhuma presença encontrada.</p>
+        </div>
 
-    <!-- Mensagens de sucesso -->
-    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <!-- Mensagens de sucesso -->
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
 
-    <!-- Mensagens de erro -->
-    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
+        <!-- Mensagens de erro -->
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+    </th:block>
 </div>
 </body>
 </html>

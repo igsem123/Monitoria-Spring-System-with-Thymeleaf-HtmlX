@@ -26,24 +26,25 @@ public class PresencaService {
 
     public Page<Presenca> listarTodosPaginado(PageRequest pageable, Long monitorId) {
         List<Monitoria> monitoriaList = monitoriaRepository.findByMonitorId(monitorId);
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
 
-        List<Presenca> presencaList = monitoriaList.stream()
+        // Lista completa de presenças do monitor
+        List<Presenca> todasPresencas = monitoriaList.stream()
                 .flatMap(monitoria -> repository.findAllByMonitoria(monitoria).stream())
                 .toList();
 
-        System.out.println("Total de presencas: " + presencaList.size());
+        int total = todasPresencas.size();
 
-        if (presencaList.size() < startItem) {
-            presencaList = Collections.emptyList();
+        int start = (int) pageable.getOffset(); // startItem = currentPage * pageSize
+        int end = Math.min((start + pageable.getPageSize()), total);
+
+        List<Presenca> paginaPresencas;
+        if (start > total) {
+            paginaPresencas = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, presencaList.size());
-            presencaList = presencaList.subList(startItem, toIndex);
+            paginaPresencas = todasPresencas.subList(start, end);
         }
 
-        return new PageImpl<>(presencaList, PageRequest.of(currentPage, pageSize), presencaList.size());
+        return new PageImpl<>(paginaPresencas, pageable, total);
     }
 
     public Optional<Presenca> buscarPorId(Long id) {

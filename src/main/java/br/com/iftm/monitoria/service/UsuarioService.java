@@ -3,6 +3,7 @@ package br.com.iftm.monitoria.service;
 import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -121,5 +122,15 @@ public class UsuarioService {
         } catch (RuntimeException e) {
             throw new RuntimeException("Erro ao atualizar avatar: " + e.getMessage());
         }
+    }
+
+    public String getAvatarPath(Long usuarioId) {
+        Usuario usuario = repository.findById(usuarioId)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+        if (usuario.getAvatarPath() != null && !usuario.getAvatarPath().isEmpty()) {
+            return usuario.getAvatarPath();
+        }
+        // Caminho padrão caso não tenha avatar
+        return "/images/default-avatar.png";
     }
 }
