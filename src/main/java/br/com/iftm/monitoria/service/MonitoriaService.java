@@ -25,20 +25,27 @@ public class MonitoriaService {
     @Autowired
     private PresencaRepository presencaRepository;
 
+    /**
+     * Lista todas as monitorias com paginação.
+     * @param pageable
+     * @return
+     */
     public Page<Monitoria> listarTodosPaginado(Pageable pageable) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
         List<Monitoria> monitorias = repository.findAll();
 
-        if (monitorias.size() < startItem) {
-            monitorias = Collections.emptyList();
+        int total = monitorias.size();
+
+        int startItem = (int) pageable.getOffset();
+        int end = Math.min((startItem + pageable.getPageSize()), total);
+
+        List<Monitoria> paginaMonitorias;
+        if (startItem > total) {
+            paginaMonitorias = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, monitorias.size());
-            monitorias = monitorias.subList(startItem, toIndex);
+            paginaMonitorias = monitorias.subList(startItem, end);
         }
 
-        return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
+        return new PageImpl<>(paginaMonitorias, pageable, total);
     }
 
     public Page<Monitoria> listarInscricoesPorUsuario(Usuario usuario, Pageable pageable) {
@@ -78,12 +85,10 @@ public class MonitoriaService {
             throw new RuntimeException("Disciplina é obrigatória!");
         }
 
-        if (monitoria.getStatus() == null || monitoria.getStatus().toString().isEmpty()) {
-            throw new RuntimeException("Status é obrigatório!");
-        }
-
         if (monitoria.getMonitor() == null) {
             monitoria.setStatus(StatusMonitoria.ABERTA);
+        } else {
+            monitoria.setStatus(StatusMonitoria.ATIVA);
         }
 
         try {

@@ -35,16 +35,16 @@ public class MonitoriaController {
     @Autowired
     private DisciplinaService disciplinaService;
 
-    @GetMapping("")
+    @GetMapping
     public String listarMonitorias(
             Model model,
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size
     ) {
-        int currentPage = page.orElse(1);
+        int currentPage = page.orElse(0);
         int pageSize = size.orElse(10);
 
-        Page<Monitoria> monitoriasPage = service.listarTodosPaginado(PageRequest.of(currentPage - 1, pageSize));
+        Page<Monitoria> monitoriasPage = service.listarTodosPaginado(PageRequest.of(currentPage, pageSize));
         model.addAttribute("monitoriasPage", monitoriasPage);
 
         int totalPages = monitoriasPage.getTotalPages();
