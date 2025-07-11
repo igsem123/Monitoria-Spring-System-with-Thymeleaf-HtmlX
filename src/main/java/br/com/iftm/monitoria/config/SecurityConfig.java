@@ -5,6 +5,7 @@ import br.com.iftm.monitoria.model.UsuarioLogado;
 import br.com.iftm.monitoria.repository.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -26,7 +27,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/index", "/usuarios/cadastrar", "/css/**", "/js/**", "/images/**", "/swagger-ui").permitAll()
-                        .requestMatchers("/usuarios/cadastrar").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/usuarios/**").permitAll()
                         .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/monitorias/**").hasAnyRole("ADMIN", "PROFESSOR", "MONITOR")
                         .requestMatchers("/disciplinas/**").hasAnyRole("ADMIN", "PROFESSOR", "MONITOR")

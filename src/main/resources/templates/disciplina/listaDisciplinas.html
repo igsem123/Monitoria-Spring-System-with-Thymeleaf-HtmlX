@@ -28,6 +28,14 @@
             Disciplina</a>
     </div>
 
+    <div th:if="${successMessage}"
+         class="bg-gray-50 border-l-4 border-green-500 text-green-700 p-4 mb-4 mt-4 rounded">
+        <p th:text="${successMessage}"></p>
+    </div>
+    <div th:if="${errorMessage}" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mt-4 rounded">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
     <div class="bg-white shadow-xl rounded-lg p-6 mb-8 border border-gray-200">
         <table class="min-w-full divide-y divide-gray-200 shadow-md rounded-lg overflow-hidden">
             <thead class="bg-green-500 text-white">
@@ -87,14 +95,6 @@
             </tbody>
         </table>
         <th:block th:replace="fragments/paginacao :: paginacao(${disciplinasPage}, '/disciplinas')"></th:block>
-    </div>
-
-    <div th:if="${successMessage}"
-         class="bg-gray-50 border-l-4 border-green-500 text-green-700 p-4 mb-4 mt-4 rounded">
-        <p th:text="${successMessage}"></p>
-    </div>
-    <div th:if="${errorMessage}" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mt-4 rounded">
-        <p th:text="${errorMessage}"></p>
     </div>
 </div>
 </body>

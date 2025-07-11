@@ -28,10 +28,10 @@ public class DisciplinaController {
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size
     ) {
-        int currentPage = page.orElse(1);
+        int currentPage = page.orElse(0);
         int pageSize = size.orElse(10);
 
-        Page<Disciplina> disciplinasPage = service.listarTodosPaginado(PageRequest.of(currentPage - 1, pageSize));
+        Page<Disciplina> disciplinasPage = service.listarTodosPaginado(PageRequest.of(currentPage, pageSize));
         model.addAttribute("disciplinasPage", disciplinasPage);
         return "disciplina/listaDisciplinas";
     }
