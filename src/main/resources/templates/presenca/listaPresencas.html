@@ -17,7 +17,7 @@
 <body class="bg-green-100 text-gray-800 antialiased min-h-screen flex flex-col items-center font-ubuntu">
 <th:block th:replace="~{fragments/menu :: menu}"></th:block>
 
-<div class=" w-8/12 bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-4 items-center">
+<div class="w-8/12 bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-4 items-center">
     <div class="flex flex-col md:flex-row items-center justify-between mb-6">
         <img src="/images/icons/ic_presencas_v2.png" alt="Ícone Presenças" class="w-24 h-24 object-contain mr-6">
         <div class="text-center md:text-left">
@@ -29,7 +29,7 @@
                     hx-get="/presenca/cadastrar"
                     hx-target="#modal-container"
                     hx-trigger="click"
-                    class="px-4 py-2 ml-6 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200">
+                    class="px-4 py-2 ml-6 bg-green-600 text-white rounded-lg hover:bg-green-700 transition shadow-md duration-200">
                 Nova Presença
             </button>
             <div id="modal-container"></div>
@@ -38,52 +38,74 @@
 
     <th:block th:if="${!presencasPage.isEmpty()}">
         <ul class="space-y-6">
-            <table class="min-w-full bg-white rounded-lg shadow-md border border-gray-200">
-                <thead>
+            <table class="min-w-full bg-white shadow-md border border-gray-200 rounded-lg overflow-hidden">
+                <thead class="bg-green-500 text-white">
                 <tr>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Monitoria
-                    </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status da
+                    <th class="px-6 py-3 text-xs font-medium border border-gray-200 uppercase tracking-wider">
                         Monitoria
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Professor
+                    <th class="px-6 py-3 text-xs font-medium border border-gray-200 uppercase tracking-wider">
+                        Status da
+                        Monitoria
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Monitor
+                    <th class="px-6 py-3 text-xs font-medium  border border-gray-200 uppercase tracking-wider">
+                        Professor
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Qtde. De
+                    <th class="px-6 py-3 text-xs font-medium  border border-gray-200 uppercase tracking-wider">
+                        Monitor
+                    </th>
+                    <th class="px-6 py-3 text-xs font-medium  border border-gray-200 uppercase tracking-wider">
+                        Qtde. De
                         Presenças
                     </th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Data</th>
-                    <th class="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider">Ações
+                    <th class="px-6 py-3 text-xs font-medium  border border-gray-200 uppercase tracking-wider">
+                        Data
+                    </th>
+                    <th class="px-6 py-3 text-xs font-medium border border-gray-200 uppercase tracking-wider rounded-tr-lg">
+                        Ações
                     </th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="presenca : ${presencasPage.content}" class="bg-gray-50 border-b ">
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-800"
+                <tr th:each="presenca, iStat : ${presencasPage.content}"
+                    th:class="${iStat.even ? 'bg-gray-100': 'bg:white'}">
+                    <td class="px-6 py-4 border whitespace-nowrap text-gray-800"
                         th:text="${presenca.monitoria.disciplina.nome}"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-800"
+                    <td class="px-6 py-4 border whitespace-nowrap text-gray-800 text-center"
                         th:text="${presenca.monitoria.status.name()}"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-800"
+                    <td class="px-6 py-4 border whitespace-nowrap text-gray-800 text-center"
                         th:text="${presenca.monitoria.professor.nome}"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-800"
+                    <td class="px-6 py-4 border whitespace-nowrap text-gray-800 text-center"
                         th:text="${presenca.monitoria.monitor.nome}"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-800"
+                    <td class="px-6 py-4 border whitespace-nowrap text-gray-800 text-center"
                         th:text="${presenca.qtdAlunosPresentes}"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-gray-800"
+                    <td class="px-6 py-4 border whitespace-nowrap  text-gray-800 text-center"
                         th:text="${#temporals.format(presenca.data, 'dd/MM/yyyy')}"></td>
-                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                        <a th:if="${presenca.monitoria.status != presenca.monitoria.status.ENCERRADA}"
-                           th:hx-get="@{/presenca/editar/{id}(id=${presenca.id})}"
-                           hx-target="#modal-container"
-                           hx-trigger="click"
-                           class="text-blue-600 hover:text-blue-800 font-semibold mr-4 cursor-pointer">Editar</a>
-                        <form th:action="@{/presenca/excluir(presencaId=${presenca.id})}" method="post"
-                              style="display:inline;">
-                            <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
-                                Excluir
-                            </button>
-                        </form>
+                    <td class="px-6 py-4 border whitespace-nowrap text-center align-middle">
+                        <div class="flex w-full justify-center gap-4">
+                            <a th:if="${presenca.monitoria.status != presenca.monitoria.status.ENCERRADA}"
+                               th:hx-get="@{/presenca/editar/{id}(id=${presenca.id})}"
+                               hx-target="#modal-container"
+                               hx-trigger="click"
+                               class="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                     stroke-width="1.5"
+                                     stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
+                                </svg>
+                            </a>
+                            <form th:action="@{/presenca/excluir(presencaId=${presenca.id})}" method="post"
+                                  style="display:inline;">
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-semibold">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                         stroke-width="1.5"
+                                         stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 </tbody>
@@ -108,8 +130,9 @@
     <!-- Mensagem de sucesso -->
     <div th:if="${successMessage != null and !#strings.isEmpty(successMessage)}"
          class="flex bg-gray-50 border-l-4 border-green-500 text-green-700 p-4 mb-4 mt-4 rounded justify-start align-middle">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-500 mr-4">
-            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="size-6 text-green-500 mr-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
         </svg>
         <p th:text="${successMessage}"></p>
     </div>
@@ -117,8 +140,10 @@
     <!-- Mensagem de erro -->
     <div th:if="${errorMessage != null and !#strings.isEmpty(errorMessage)}"
          class="flex bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mt-4 rounded justify-start align-middle">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 mr-4">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+             class="size-6 text-red-500 mr-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
         </svg>
         <p th:text="${errorMessage}"></p>
     </div>
