@@ -1,0 +1,37 @@
+<!-- templates/fragments/modal-avatar-pre-selecionado.html -->
+<div th:fragment="fragment(avatares)">
+    <!-- Fundo escuro do modal. Clicar nele fecha o modal. -->
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+         hx-on:click="this.remove()">
+
+        <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md relative" hx-on:click.stop>
+
+            <!-- Botão de fechar (X) -->
+            <button
+                    hx-on:click="htmx.closest(this, '#modal-container').innerHTML = ''"
+                    class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="size-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
+                </svg>
+            </button>
+
+            <h2 class="text-xl font-bold mb-8">Selecione um Avatar da Lista:</h2>
+
+            <!-- Grid com os avatares para seleção -->
+            <div class="grid grid-cols-3 sm:grid-cols-4 gap-4">
+                <!-- Loop sobre a lista de avatares passada pelo controller -->
+                <div th:each="avatarUrl : ${avatares}">
+                    <button
+                            th:hx-post="@{/perfil/avatar/selecionar(avatarUrl=${avatarUrl})}"
+                            hx-target="#avatar-display"
+                            hx-swap="innerHTML"
+                            hx-on:htmx:after-request="document.getElementById('modal-container-avatar').innerHTML = ''"
+                            class="rounded-full transition hover:scale-110">
+                        <img th:src="${avatarUrl}" alt="Avatar" class="w-24 h-24 rounded-full">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

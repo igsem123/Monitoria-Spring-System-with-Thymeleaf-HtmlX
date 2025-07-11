@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -39,7 +40,7 @@ public class UsuarioController {
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isMonitorOrProfessor", isMonitorOrProfessor);
-        return "usuarios";
+        return "usuario/usuarios";
     }
 
     // Exibe o formulário de cadastro
@@ -49,15 +50,32 @@ public class UsuarioController {
         novoUsuario.setPapel(new Papel());
         model.addAttribute("usuario", novoUsuario);
         model.addAttribute("papeis", papelService.listarTodos());
-        return "cadastroUsuarios"; // Nome da View HTML
+        return "usuario/cadastroUsuarios"; // Nome da View HTML
     }
 
     // Processa o envio do formulário de cadastro / edição
     @PostMapping // Lida tanto com o cadastro quanto com a atualização (se o ID estiver presente no @ModelAttribute)
-    public String salvarUsuario(@ModelAttribute Usuario usuario, RedirectAttributes redirectAttributes) {
+    public String salvarUsuario(
+            @ModelAttribute Usuario usuario,
+            RedirectAttributes redirectAttributes,
+            Principal principal
+    ) {
+        boolean isAuthenticated = principal != null;
+
+        if(!isAuthenticated) {
+            Papel papelMonitor = papelService.buscarPorNome("Monitor");
+            usuario.setPapel(papelMonitor);
+        }
+
+        usuario.setAvatarPath("/images/avatars/default.png");
         usuarioService.salvar(usuario);
         redirectAttributes.addFlashAttribute("mensagemSucesso", "Usuário salvo com sucesso!");
-        return "redirect:/usuarios/listar";
+
+        if (isAuthenticated) {
+            return "redirect:/usuarios/listar";
+        }
+
+        return  "redirect:/login";
     }
 
     // Exibe o formulário de edição para um usuário específico
@@ -72,7 +90,7 @@ public class UsuarioController {
 
         model.addAttribute("usuario", usuarioExistente);
         model.addAttribute("papeis", papelService.listarTodos());
-        return "editarUsuario"; // Nome da View HTML
+        return "usuario/editarUsuario"; // Nome da View HTML
     }
 
     // Processa o envio do formulário de edição

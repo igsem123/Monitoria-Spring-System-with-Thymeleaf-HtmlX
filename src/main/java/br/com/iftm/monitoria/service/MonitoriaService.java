@@ -25,20 +25,27 @@ public class MonitoriaService {
     @Autowired
     private PresencaRepository presencaRepository;
 
+    /**
+     * Lista todas as monitorias com paginação.
+     * @param pageable
+     * @return
+     */
     public Page<Monitoria> listarTodosPaginado(Pageable pageable) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
         List<Monitoria> monitorias = repository.findAll();
 
-        if (monitorias.size() < startItem) {
-            monitorias = Collections.emptyList();
+        int total = monitorias.size();
+
+        int startItem = (int) pageable.getOffset();
+        int end = Math.min((startItem + pageable.getPageSize()), total);
+
+        List<Monitoria> paginaMonitorias;
+        if (startItem > total) {
+            paginaMonitorias = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, monitorias.size());
-            monitorias = monitorias.subList(startItem, toIndex);
+            paginaMonitorias = monitorias.subList(startItem, end);
         }
 
-        return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
+        return new PageImpl<>(paginaMonitorias, pageable, total);
     }
 
     public Page<Monitoria> listarInscricoesPorUsuario(Usuario usuario, Pageable pageable) {
@@ -61,13 +68,19 @@ public class MonitoriaService {
         return new PageImpl<>(monitorias, PageRequest.of(currentPage, pageSize), monitorias.size());
     }
 
+    public List<Monitoria> buscarMonitoriasDoMonitorAtivas(Usuario monitor) {
+        return repository.findByMonitorIdAndStatus(monitor.getId(), StatusMonitoria.ATIVA);
+    }
+
     public void salvar(Monitoria monitoria) {
         if (monitoria.getAno() == null || monitoria.getAno() <= 0) {
             throw new RuntimeException("Ano é obrigatório e deve ser maior que zero!");
         }
+
         if (monitoria.getSemestre() == null || monitoria.getSemestre() <= 0) {
             throw new RuntimeException("Semestre é obrigatório e deve ser maior que zero!");
         }
+
         if (monitoria.getDisciplina() == null || monitoria.getDisciplina().getId() == null) {
             throw new RuntimeException("Disciplina é obrigatória!");
         }
@@ -82,6 +95,30 @@ public class MonitoriaService {
             repository.save(monitoria);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao salvar monitoria: " + e.getMessage(), e);
+        }
+    }
+
+    public void editar(Monitoria monitoria) {
+        if (monitoria.getAno() == null || monitoria.getAno() <= 0) {
+            throw new RuntimeException("Ano é obrigatório e deve ser maior que zero!");
+        }
+
+        if (monitoria.getSemestre() == null || monitoria.getSemestre() <= 0) {
+            throw new RuntimeException("Semestre é obrigatório e deve ser maior que zero!");
+        }
+
+        if (monitoria.getDisciplina() == null || monitoria.getDisciplina().getId() == null) {
+            throw new RuntimeException("Disciplina é obrigatória!");
+        }
+
+        if (monitoria.getStatus() == null || monitoria.getStatus().toString().isEmpty()) {
+            throw new RuntimeException("Status é obrigatório!");
+        }
+
+        try {
+            repository.save(monitoria);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao editar monitoria: " + e.getMessage(), e);
         }
     }
 
@@ -127,7 +164,7 @@ public class MonitoriaService {
 
     @Transactional
     public void deletar(Long id) {
-    Monitoria monitoria = repository.findById(id)
+        Monitoria monitoria = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Monitoria não encontrada"));
 
         if (monitoria.getMonitor() != null) {
@@ -162,5 +199,13 @@ public class MonitoriaService {
         } catch (Exception e) {
             throw new RuntimeException("Erro ao encerrar monitoria: " + e.getMessage(), e);
         }
+    }
+
+    public List<Monitoria> buscarTodos() {
+        List<Monitoria> monitorias = repository.findAll();
+        if (monitorias.isEmpty()) {
+            throw new RuntimeException("Nenhuma monitoria encontrada.");
+        }
+        return monitorias;
     }
 }

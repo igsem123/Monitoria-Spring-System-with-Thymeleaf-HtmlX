@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -17,7 +18,7 @@ public class Presenca {
     private int qtdAlunosPresentes;
 
     @NotNull(message = "É obrigatório informar a data da monitoria.")
-    private Date data;
+    private LocalDate data;
 
     @ManyToOne
     @JoinColumn(name = "monitoria_id")
@@ -28,7 +29,7 @@ public class Presenca {
     }
 
     // Construtor com parâmetros
-    public Presenca(int qtdAlunosPresentes, Date data, Monitoria monitoria) {
+    public Presenca(int qtdAlunosPresentes, LocalDate data, Monitoria monitoria) {
         this.qtdAlunosPresentes = qtdAlunosPresentes;
         this.data = data;
         this.monitoria = monitoria;
@@ -51,11 +52,11 @@ public class Presenca {
         this.qtdAlunosPresentes = qtdAlunosPresentes;
     }
 
-    public Date getData() {
+    public LocalDate getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDate data) {
         this.data = data;
     }
 

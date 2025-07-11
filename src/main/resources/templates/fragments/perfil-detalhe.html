@@ -1,0 +1,7 @@
+<!-- fragments/perfil-detalhe.html -->
+<div th:fragment="perfilDetalhe">
+  <div id="perfil-detalhe" hx-swap-oob="true" class="w-full flex flex-col items-center">
+    <h2 th:text="${perfil.nome}" class="text-2xl font-bold mb-1">Nome</h2>
+    <p th:text="${perfil.email}" class="text-gray-600 mb-4">Email</p>
+  </div>
+</div>

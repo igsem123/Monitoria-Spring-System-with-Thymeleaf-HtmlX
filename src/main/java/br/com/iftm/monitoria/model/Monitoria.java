@@ -15,7 +15,7 @@ public class Monitoria {
     private Long id;
 
     @NotNull(message = "Status é obrigatório!")
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private StatusMonitoria status;
 
     private String horario;

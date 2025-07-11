@@ -7,7 +7,6 @@ import br.com.iftm.monitoria.model.Usuario;
 import br.com.iftm.monitoria.service.DisciplinaService;
 import br.com.iftm.monitoria.service.MonitoriaService;
 import br.com.iftm.monitoria.service.UsuarioService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,16 +35,16 @@ public class MonitoriaController {
     @Autowired
     private DisciplinaService disciplinaService;
 
-    @GetMapping("")
+    @GetMapping
     public String listarMonitorias(
             Model model,
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size
     ) {
-        int currentPage = page.orElse(1);
+        int currentPage = page.orElse(0);
         int pageSize = size.orElse(10);
 
-        Page<Monitoria> monitoriasPage = service.listarTodosPaginado(PageRequest.of(currentPage - 1, pageSize));
+        Page<Monitoria> monitoriasPage = service.listarTodosPaginado(PageRequest.of(currentPage, pageSize));
         model.addAttribute("monitoriasPage", monitoriasPage);
 
         int totalPages = monitoriasPage.getTotalPages();
@@ -56,7 +55,7 @@ public class MonitoriaController {
 
             model.addAttribute("pageNumbers", pageNumbers);
         }
-        return "listaMonitorias"; // Nome da View HTML para a listagem de monitorias
+        return "monitoria/listaMonitorias"; // Nome da View HTML para a listagem de monitorias
     }
 
     @GetMapping("/inscricoes")
@@ -76,10 +75,10 @@ public class MonitoriaController {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(10);
 
-        Page<Monitoria> inscricoesPage = service.listarInscricoesPorUsuario(usuario, PageRequest.of(currentPage - 1, pageSize));
-        model.addAttribute("inscricoesPage", inscricoesPage);
+        Page<Monitoria> monitoriasInscritas = service.listarInscricoesPorUsuario(usuario, PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("monitoriasInscritas", monitoriasInscritas);
 
-        int totalPages = inscricoesPage.getTotalPages();
+        int totalPages = monitoriasInscritas.getTotalPages();
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
                     .boxed()
@@ -87,7 +86,7 @@ public class MonitoriaController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
 
-        return "listaInscricoes"; // Nome da View HTML para a lista de inscrições do usuário
+        return "monitoria/listaInscricoes"; // Nome da View HTML para a lista de inscrições do usuário
     }
 
     @PostMapping
@@ -118,7 +117,7 @@ public class MonitoriaController {
         model.addAttribute("disciplinas", disciplinas);
 
         model.addAttribute("monitoria", novaMonitoria);
-        return "cadastroMonitorias"; // Nome da View HTML para o formulário de cadastro
+        return "monitoria/cadastroMonitorias"; // Nome da View HTML para o formulário de cadastro
     }
 
     @PostMapping("/deletar/{id}")
@@ -155,13 +154,13 @@ public class MonitoriaController {
         model.addAttribute("statusMonitorias", StatusMonitoria.values());
 
         model.addAttribute("monitoria", monitoria);
-        return "edicaoMonitorias"; // Nome da View HTML para o formulário de edição
+        return "monitoria/edicaoMonitorias"; // Nome da View HTML para o formulário de edição
     }
 
     @PostMapping("/editar/{id}")
     public String editarMonitoria(@ModelAttribute Monitoria monitoria, RedirectAttributes redirectAttributes) {
         try {
-            service.salvar(monitoria);
+            service.editar(monitoria);
             redirectAttributes.addFlashAttribute("mensagemSucesso", "Monitoria editada com sucesso!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("mensagemErro", "Erro ao editar monitoria: " + e.getMessage());
@@ -198,7 +197,7 @@ public class MonitoriaController {
 
         model.addAttribute("monitoria", monitoria);
         model.addAttribute("usuario", usuario); // Adiciona o usuário autenticado ao modelo
-        return "visualizarMonitoria"; // Nome da View HTML para visualizar detalhes da monitoria
+        return "monitoria/visualizarMonitoria";
     }
 
     @PostMapping("/encerrar/{id}")
