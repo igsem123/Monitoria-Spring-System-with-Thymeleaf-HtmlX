@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -26,24 +27,25 @@ public class PresencaService {
 
     public Page<Presenca> listarTodosPaginado(PageRequest pageable, Long monitorId) {
         List<Monitoria> monitoriaList = monitoriaRepository.findByMonitorId(monitorId);
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
 
-        List<Presenca> presencaList = monitoriaList.stream()
+        // Lista completa de presenças do monitor
+        List<Presenca> todasPresencas = monitoriaList.stream()
                 .flatMap(monitoria -> repository.findAllByMonitoria(monitoria).stream())
                 .toList();
 
-        System.out.println("Total de presencas: " + presencaList.size());
+        int total = todasPresencas.size();
 
-        if (presencaList.size() < startItem) {
-            presencaList = Collections.emptyList();
+        int start = (int) pageable.getOffset(); // startItem = currentPage * pageSize
+        int end = Math.min((start + pageable.getPageSize()), total);
+
+        List<Presenca> paginaPresencas;
+        if (start > total) {
+            paginaPresencas = Collections.emptyList();
         } else {
-            int toIndex = Math.min(startItem + pageSize, presencaList.size());
-            presencaList = presencaList.subList(startItem, toIndex);
+            paginaPresencas = todasPresencas.subList(start, end);
         }
 
-        return new PageImpl<>(presencaList, PageRequest.of(currentPage, pageSize), presencaList.size());
+        return new PageImpl<>(paginaPresencas, pageable, total);
     }
 
     public Optional<Presenca> buscarPorId(Long id) {
@@ -62,11 +64,26 @@ public class PresencaService {
             throw new IllegalArgumentException("A data da presença não pode ser nula.");
         }
 
+        Integer ano = monitoriaRepository.findById(presenca.getMonitoria().getId()).isPresent()
+                ? monitoriaRepository.findById(presenca.getMonitoria().getId()).get().getAno() : null;
+
+        if (ano != null) {
+            // Parse do Ano para LocalDate
+            LocalDate inicioAno = LocalDate.of(ano, 1, 1);
+            LocalDate fimAno = LocalDate.of(ano, 12, 31);
+
+            if (presenca.getData().isBefore(inicioAno) || presenca.getData().isAfter(fimAno)) {
+                throw new IllegalArgumentException("A data da lista de presença deve estar dentro do ano da monitoria.");
+            }
+        } else {
+            throw new IllegalArgumentException("Ano da monitoria não encontrado.");
+        }
+
         // Verifico se já não existe uma presença para a mesma data e monitoria
         if (presenca.getId() != null) {
             Presenca existingPresenca = repository.findByDataAndMonitoria(presenca.getData(), presenca.getMonitoria());
             if (existingPresenca != null && !existingPresenca.getId().equals(presenca.getId())) {
-                throw new IllegalArgumentException("Já existe uma presença registrada para esta data e monitoria.");
+                throw new IllegalArgumentException("Já existe uma lista de presença registrada para esta data e monitoria.");
             }
         }
 

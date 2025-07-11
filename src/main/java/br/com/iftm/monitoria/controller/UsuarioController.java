@@ -40,7 +40,7 @@ public class UsuarioController {
         model.addAttribute("usuarios", usuarios);
         model.addAttribute("isAdmin", isAdmin);
         model.addAttribute("isMonitorOrProfessor", isMonitorOrProfessor);
-        return "usuarios";
+        return "usuario/usuarios";
     }
 
     // Exibe o formulário de cadastro
@@ -50,7 +50,7 @@ public class UsuarioController {
         novoUsuario.setPapel(new Papel());
         model.addAttribute("usuario", novoUsuario);
         model.addAttribute("papeis", papelService.listarTodos());
-        return "cadastroUsuarios"; // Nome da View HTML
+        return "usuario/cadastroUsuarios"; // Nome da View HTML
     }
 
     // Processa o envio do formulário de cadastro / edição
@@ -90,7 +90,7 @@ public class UsuarioController {
 
         model.addAttribute("usuario", usuarioExistente);
         model.addAttribute("papeis", papelService.listarTodos());
-        return "editarUsuario"; // Nome da View HTML
+        return "usuario/editarUsuario"; // Nome da View HTML
     }
 
     // Processa o envio do formulário de edição

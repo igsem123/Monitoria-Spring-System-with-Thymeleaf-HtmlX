@@ -52,7 +52,7 @@
 
         <!-- Avatar do perfil -->
         <div class="flex items-center space-x-2">
-            <img th:src="@{${#authentication.principal.avatarPath}}" alt="Avatar"
+            <img th:src="@{${@usuarioService.getAvatarPath(#authentication.principal.usuario.id)}}" alt="Avatar"
                  class="w-10 h-10 rounded-full border border-green-300 mr-2">
             <div class="flex flex-col">
                 <span class="font-semibold" th:text="${#authentication.principal.usuario.nome}"></span>

@@ -59,7 +59,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="presenca : ${presencasPage}" class="bg-gray-50 border-b ">
+                <tr th:each="presenca : ${presencasPage.content}" class="bg-gray-50 border-b ">
                     <td class="px-6 py-4 whitespace-nowrap text-gray-800"
                         th:text="${presenca.monitoria.disciplina.nome}"></td>
                     <td class="px-6 py-4 whitespace-nowrap text-gray-800"
@@ -92,24 +92,36 @@
 
         <th:block th:replace="fragments/paginacao :: paginacao(${presencasPage}, '/presenca')"></th:block>
 
-    <div th:fragment="formPresenca">
-        <!-- Seu formulário aqui -->
+        <div th:fragment="formPresenca">
+            <!-- Seu formulário aqui -->
+        </div>
+
+        <div th:fragment="modalEdicaoPresenca">
+            <!-- Modal para edição de presença -->
+        </div>
+
+        <div th:if="${presencasPage.isEmpty()}" class="text-center text-gray-600 py-8">
+            <p>Nenhuma presença encontrada.</p>
+        </div>
+    </th:block>
+
+    <!-- Mensagem de sucesso -->
+    <div th:if="${successMessage != null and !#strings.isEmpty(successMessage)}"
+         class="flex bg-gray-50 border-l-4 border-green-500 text-green-700 p-4 mb-4 mt-4 rounded justify-start align-middle">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-green-500 mr-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        <p th:text="${successMessage}"></p>
     </div>
 
-    <div th:fragment="modalEdicaoPresenca">
-        <!-- Modal para edição de presença -->
+    <!-- Mensagem de erro -->
+    <div th:if="${errorMessage != null and !#strings.isEmpty(errorMessage)}"
+         class="flex bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4 mt-4 rounded justify-start align-middle">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-red-500 mr-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+        </svg>
+        <p th:text="${errorMessage}"></p>
     </div>
-
-    <div th:if="${presencasPage.isEmpty()}" class="text-center text-gray-600 py-8">
-        <p>Nenhuma presença encontrada.</p>
-    </div>
-
-    <!-- Mensagens de sucesso -->
-    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-
-    <!-- Mensagens de erro -->
-    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
-
 </div>
 </body>
 </html>
