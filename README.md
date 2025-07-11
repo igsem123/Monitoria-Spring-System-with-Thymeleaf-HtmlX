@@ -61,11 +61,7 @@ O sistema é servido via HTTPS (porta 8443) com um certificado autoassinado.
 Execute no terminal:
 
 ```
-keytool -genkeypair -alias monitoria-ssl \
-  -keyalg RSA -keysize 2048 -storetype PKCS12 \
-  -keystore keystore.p12 -validity 3650 \
-  -storepass senha123 -keypass senha123 \
-  -dname "CN=localhost, OU=Monitoria, O=IFTMonline, L=Localhost, ST=MG, C=BR"
+keytool -genkeypair -alias monitoria-ssl -keyalg RSA -keysize 2048 -storetype PKCS12 -keystore keystore.p12 -validity 3650 -storepass senha123 -keypass senha123 -dname "CN=localhost, OU=Monitoria, O=IFTMonline, L=Localhost, ST=MG, C=BR"
 ```
 
 Mova o keystore.p12 para a pasta:

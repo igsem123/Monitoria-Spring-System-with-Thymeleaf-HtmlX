@@ -14,8 +14,8 @@
 </head>
 <body class="bg-green-100 text-gray-800 antialiased min-h-screen flex flex-col items-center font-ubuntu">
 <th:block th:replace="~{fragments/menu :: menu}"></th:block>
-<div class="container mx-auto px-4 max-w-6xl">
-    <div class="flex w-full bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-4 items-center">
+
+    <div class="flex w-8/12 bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-4 items-center">
         <img src="/images/icons/ic_monitorias.png" alt="Ícone Monitorias"
              class="w-24 h-24 object-contain mr-4">
         <div class="w-full p-0">
@@ -26,7 +26,7 @@
             <th:block
                     th:if="${usuarioLogado != null and (usuarioLogado.papel.nome == 'Administrador' or usuarioLogado.papel.nome == 'Professor')}">
                 <a href="/monitorias/cadastrar"
-                   class="inline-flex items-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 ease-in-out shadow-lg">
+                   class="w-auto items-center bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 ease-in-out shadow-lg">
                     Cadastrar Nova Monitoria
                 </a>
             </th:block>
@@ -39,33 +39,34 @@
             </th:block>
         </div>
     </div>
+
     <div class="bg-white border shadow-md border-gray-200 rounded-lg py-4 px-4 mb-8">
         <table class="w-full border-separated border-spacing-0 shadow-md border border-gray-200 rounded-lg overflow-hidden">
-            <thead class="bg-gray-200">
+            <thead class="bg-green-500 text-white">
             <tr>
-                <th class="px-4 py-2 border border-gray-200">Status</th>
-                <th class="px-4 py-2 border border-gray-200">Horário</th>
-                <th class="px-4 py-2 border border-gray-200">Ano</th>
-                <th class="px-4 py-2 border border-gray-200">Semestre</th>
-                <th class="px-4 py-2 border border-gray-200">Professor</th>
-                <th class="px-4 py-2 border border-gray-200">Disciplina</th>
-                <th class="px-4 py-2 border border-gray-200">Monitor</th>
-                <th class="px-4 py-2 border border-gray-200 rounded-tr-lg">Ações</th>
+                <th class="px-6 py-3 border border-gray-200">Status</th>
+                <th class="px-6 py-3 border border-gray-200">Horário</th>
+                <th class="px-6 py-3 border border-gray-200">Ano</th>
+                <th class="px-6 py-3 border border-gray-200">Semestre</th>
+                <th class="px-6 py-3 border border-gray-200">Professor</th>
+                <th class="px-6 py-3 border border-gray-200">Disciplina</th>
+                <th class="px-6 py-3 border border-gray-200">Monitor</th>
+                <th class="px-6 py-3 border border-gray-200 rounded-tr-lg">Ações</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="monitoria, iStat : ${monitoriasPage.content}"
                 th:class="${iStat.even ? 'bg-gray-100' : 'bg-white'}">
-                <td class="px-4 py-2 border" th:text="${monitoria.status}"></td>
-                <td class="px-4 py-2 border" th:text="${monitoria.horario}"></td>
-                <td class="px-4 py-2 border" th:text="${monitoria.ano}"></td>
-                <td class="px-4 py-2 border" th:text="${monitoria.semestre}"></td>
-                <td class="px-4 py-2 border" th:text="${monitoria.professor.nome}"></td>
-                <td class="px-4 py-2 border" th:text="${monitoria.disciplina.nome}"></td>
-                <td class="px-4 py-2 border"
+                <td class="px-6 py-3 border" th:text="${monitoria.status}"></td>
+                <td class="px-6 py-3 border" th:text="${monitoria.horario}"></td>
+                <td class="px-6 py-3 border" th:text="${monitoria.ano}"></td>
+                <td class="px-6 py-3 border" th:text="${monitoria.semestre}"></td>
+                <td class="px-6 py-3 border" th:text="${monitoria.professor.nome}"></td>
+                <td class="px-6 py-3 border" th:text="${monitoria.disciplina.nome}"></td>
+                <td class="px-6 py-3 border"
                     th:text="${monitoria.monitor != null ? monitoria.monitor.nome : 'Sem monitor'}"></td>
-                <td class="px-4 py-2 border">
-                    <div class="flex w-full items-center gap-4 justify-center">
+                <td class="px-6 py-3 border">
+                    <div class="flex w-full justify-center gap-6">
                         <th:block
                                 th:if="${usuarioLogado != null and (usuarioLogado.papel.nome == 'Administrador' or usuarioLogado.papel.nome == 'Professor')}">
 
@@ -157,8 +158,5 @@
             <p th:text="${mensagemErro}"></p>
         </div>
     </div>
-
-
-</div>
 </body>
 </html>
