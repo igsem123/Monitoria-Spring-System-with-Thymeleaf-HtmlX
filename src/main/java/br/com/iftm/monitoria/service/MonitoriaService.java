@@ -31,7 +31,10 @@ public class MonitoriaService {
      * @return
      */
     public Page<Monitoria> listarTodosPaginado(Pageable pageable) {
-        List<Monitoria> monitorias = repository.findAll();
+        List<Monitoria> monitorias = repository.findAll()
+            .stream()
+            .sorted((m1, m2) -> m1.getId().compareTo(m2.getId()))
+            .toList();
 
         int total = monitorias.size();
 
@@ -167,7 +170,7 @@ public class MonitoriaService {
         Monitoria monitoria = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Monitoria não encontrada"));
 
-        if (monitoria.getMonitor() != null) {
+        if (monitoria.getMonitor() != null && monitoria.getStatus() == StatusMonitoria.ATIVA) {
             throw new RuntimeException("Não é possível deletar uma monitoria que possui um monitor ativo!");
         }
 
