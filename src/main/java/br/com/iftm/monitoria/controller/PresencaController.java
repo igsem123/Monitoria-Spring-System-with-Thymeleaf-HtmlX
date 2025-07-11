@@ -40,7 +40,8 @@ public class PresencaController {
             @RequestParam("page") Optional<Integer> page,
             @RequestParam("size") Optional<Integer> size,
             Principal principal,
-            RedirectAttributes redirectAttributes
+            @ModelAttribute("successMessage") String successMessage,
+            @ModelAttribute("errorMessage") String errorMessage
     ) {
         if (principal == null) {
             return "redirect:/login";
@@ -49,13 +50,13 @@ public class PresencaController {
         String email = principal.getName();
         Usuario monitor = usuarioService.buscarPorEmail(email);
 
-        int currentPage = page.orElse(1);
+        int currentPage = page.orElse(0);
         int pageSize = size.orElse(10);
 
-        Page<Presenca> presencasPage = presencaService.listarTodosPaginado(PageRequest.of(currentPage - 1, pageSize), monitor.getId());
+        Page<Presenca> presencasPage = presencaService.listarTodosPaginado(PageRequest.of(currentPage, pageSize), monitor.getId());
         model.addAttribute("presencasPage", presencasPage);
-        model.addAttribute("successMessage", redirectAttributes.getFlashAttributes().get("successMessage"));
-        model.addAttribute("errorMessage", redirectAttributes.getFlashAttributes().get("errorMessage"));
+        model.addAttribute("successMessage", successMessage);
+        model.addAttribute("errorMessage", errorMessage);
 
         int totalPages = presencasPage.getTotalPages();
         if (totalPages > 0) {
@@ -89,8 +90,8 @@ public class PresencaController {
             @RequestParam("monitoriaId") Long monitoriaId,
             @RequestParam("dataPresenca") String dataPresenca,
             @RequestParam("qtdAlunosPresentes") Integer qtdAlunosPresentes,
-            Model model,
-            Principal principal
+            Principal principal,
+            RedirectAttributes redirectAttributes
     ) {
         if (principal == null) {
             return "redirect:/login";
@@ -101,18 +102,23 @@ public class PresencaController {
 
         Monitoria monitoria = monitoriaService.buscarPorId(monitoriaId);
         if (monitoria != null && monitoria.getMonitor().getId().equals(monitor.getId())) {
-            Presenca presenca = new Presenca();
-            presenca.setMonitoria(monitoria);
+            try {
+                Presenca presenca = new Presenca();
+                presenca.setMonitoria(monitoria);
 
-            // Converto a data para LocalDate
-            LocalDate data = LocalDate.parse(dataPresenca);
-            presenca.setData(data);
+                // Converto a data para LocalDate
+                LocalDate data = LocalDate.parse(dataPresenca);
+                presenca.setData(data);
 
-            presenca.setQtdAlunosPresentes(qtdAlunosPresentes);
-            presencaService.salvar(presenca);
-            model.addAttribute("successMessage", "Presença registrada com sucesso!");
+                presenca.setQtdAlunosPresentes(qtdAlunosPresentes);
+                presencaService.salvar(presenca);
+                redirectAttributes.addFlashAttribute("successMessage", "Presença registrada com sucesso!");
+            } catch (IllegalArgumentException ex) {
+                redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
+            }
+
         } else {
-            model.addAttribute("errorMessage", "Monitoria não encontrada ou você não tem permissão para registrar presença.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Monitoria não encontrada ou você não tem permissão para registrar presença.");
         }
 
         return "redirect:/presenca";

@@ -26,6 +26,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/index", "/usuarios/cadastrar", "/css/**", "/js/**", "/images/**", "/swagger-ui").permitAll()
+                        .requestMatchers("/usuarios/cadastrar").hasRole("ADMIN")
                         .requestMatchers("/usuarios/**").hasAnyRole("ADMIN", "PROFESSOR")
                         .requestMatchers("/monitorias/**").hasAnyRole("ADMIN", "PROFESSOR", "MONITOR")
                         .requestMatchers("/disciplinas/**").hasAnyRole("ADMIN", "PROFESSOR", "MONITOR")
@@ -44,9 +45,14 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                         .permitAll()
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
                 )
                 .csrf(csrf -> csrf
                         .csrfTokenRepository(org.springframework.security.web.csrf.CookieCsrfTokenRepository.withHttpOnlyFalse())
+                )
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(org.springframework.security.config.http.SessionCreationPolicy.ALWAYS)
                 );
         return http.build();
     }
