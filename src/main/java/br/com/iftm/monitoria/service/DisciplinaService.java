@@ -3,6 +3,9 @@ package br.com.iftm.monitoria.service;
 import br.com.iftm.monitoria.model.Disciplina;
 import br.com.iftm.monitoria.repository.DisciplinaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -124,5 +127,25 @@ public class DisciplinaService {
         } catch (Exception e) {
             System.err.println("Erro inesperado ao excluir disciplina: " + e.getMessage());
         }
+    }
+
+    public Page<Disciplina> listarTodosPaginado(PageRequest pageable) {
+        List<Disciplina> disciplinas = repository.findAll();
+        if (disciplinas.isEmpty()) {
+            return Page.empty(pageable);
+        }
+
+        int total = disciplinas.size();
+        int startItem = (int) pageable.getOffset();
+        int end = Math.min((startItem + pageable.getPageSize()), total);
+
+        List<Disciplina> paginaDisciplinas;
+        if (startItem >= total) {
+            return Page.empty(pageable);
+        } else {
+            paginaDisciplinas = disciplinas.subList(startItem, end);
+        }
+
+        return new PageImpl<>(paginaDisciplinas, pageable, total);
     }
 }

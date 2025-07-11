@@ -4,13 +4,17 @@ import br.com.iftm.monitoria.model.Disciplina;
 import br.com.iftm.monitoria.service.DisciplinaService;
 import io.github.wimdeblauwe.htmx.spring.boot.mvc.HxRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/disciplinas")
@@ -22,10 +26,15 @@ public class DisciplinaController {
     // Lista todas as disciplinas
     @GetMapping
     public String listarDisciplinas(
-            Model model
+            Model model,
+            @RequestParam("page") Optional<Integer> page,
+            @RequestParam("size") Optional<Integer> size
     ) {
-        List<Disciplina> disciplinas = service.listarTodos();
-        model.addAttribute("disciplinas", disciplinas);
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(10);
+
+        Page<Disciplina> disciplinasPage = service.listarTodosPaginado(PageRequest.of(currentPage - 1, pageSize));
+        model.addAttribute("disciplinasPage", disciplinasPage);
         return "disciplina/disciplinas";
     }
 
