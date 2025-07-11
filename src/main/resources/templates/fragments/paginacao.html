@@ -10,7 +10,7 @@
                class="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Anterior</a>
 
             <span class="px-4 py-2 text-gray-600"
-                  th:text="'Página ' + (${page.getNumber() + 1}) + ' de ' + ${page.totalPages}"></span>
+                  th:text="'Página ' + (${page.number + 1}) + ' de ' + ${page.totalPages}"></span>
 
             <a th:if="${page.hasNext()}"
                th:href="@{${urlBase}(page=${page.number + 1})}"
